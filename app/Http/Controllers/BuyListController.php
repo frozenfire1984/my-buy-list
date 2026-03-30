@@ -12,7 +12,15 @@ class BuyListController extends Controller
         $count = $items->count();
         return view('buy-list', [
             'items' => $items,
-            'count' => $count
+            'count' => $count,
         ]);
+    }
+
+    public function store (Request $request) {
+        Item::create([
+            'name' => $request->name,
+            'price' => $request->price,
+        ]);
+        return redirect('/buy-list')->with('success', 'Товар успешно добавлен');
     }
 }

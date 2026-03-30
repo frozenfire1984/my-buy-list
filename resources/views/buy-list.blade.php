@@ -19,5 +19,17 @@
             <li>{{ $item->name }}</li>
         @endforeach
         </ul>
+        <hr>
+        <form method="POST" action="/buy-list">
+            @csrf
+            <input type="text" name="name">
+            <input type="number" name="price">
+            <hr>
+            <button type="submit">Create</button>
+        </form>
+        @if(session('success'))
+            <div>{{ session('success') }}</div>
+        @endif
+
     </body>
 </html>

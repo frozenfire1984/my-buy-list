@@ -6,16 +6,16 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Item;
 
-class ItemSeeder extends Seeder
+class UpdateExistingItemsPriceSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        //Item::create(['name' => 'Хлеб']);
-        //Item::create(['name' => 'Яйца']);
-        //Item::create(['name' => 'Масло']);
-        Item::factory()->count(5)->create();
+        Item::whereNull('price')->each(function ($item) {
+            $item->update(['price' => fake()->numberBetween(10, 1000)]);
+        });
+
     }
 }
