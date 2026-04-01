@@ -8,6 +8,9 @@ use App\Models\Item;
 class BuyListController extends Controller
 {
     public function index() {
+
+        session(['test' => 'какая то херотень']);
+
         $items = Item::all();
         $count = $items->count();
         return view('buy-list', [
@@ -17,6 +20,12 @@ class BuyListController extends Controller
     }
 
     public function store (Request $request) {
+        $request->validate([
+            'name' => 'required|min:2|max:10',
+            'price' => 'nullable|numeric|min:0',
+
+        ]);
+
         Item::create([
             'name' => $request->name,
             'price' => $request->price,

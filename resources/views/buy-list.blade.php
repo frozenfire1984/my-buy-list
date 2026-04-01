@@ -13,6 +13,7 @@
     <body class="bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1b1b18] flex p-6 lg:p-8 items-center lg:justify-center min-h-screen flex-col">
 
         <h1>Список покупок</h1>
+        {{ session('test') }}
         <p>Количество товаров {{ $count }}</p>
         <ul>
         @foreach($items as $item)
@@ -22,8 +23,18 @@
         <hr>
         <form method="POST" action="/buy-list">
             @csrf
-            <input type="text" name="name">
-            <input type="number" name="price">
+            <div>
+                <input type="text" name="name" value="{{ old('name') }}">
+                @error('name')
+                    <div style="color: red">{{ $message }}</div>
+                @enderror
+            </div>
+            <div>
+                <input type="text" name="price" value="{{ old('price') }}">
+                @error('price')
+                <div style="color: red">{{ $message }}</div>
+                @enderror
+            </div>
             <hr>
             <button type="submit">Create</button>
         </form>
@@ -31,5 +42,12 @@
             <div>{{ session('success') }}</div>
         @endif
 
+        @if($errors->any())
+            <ul>
+                @foreach($errors->all() as $error)
+                    <li style="color: red;">{{ $error }}</li>
+                @endforeach
+            </ul>
+        @endif
     </body>
 </html>
