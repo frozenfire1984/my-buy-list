@@ -3,16 +3,21 @@ use App\Http\Controllers\BuyListController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
 });
 
-Route::get('/test', function () {
-    return view('test');
+Route::get('/about', function () {
+    return view('about');
 });
 
 Route::get('/buy-list', [BuyListController::class, 'index']);
 
+Route::get('/buy-list-details/{id}', [BuyListController::class, 'show']);
+
 Route::post('/buy-list', [BuyListController::class, 'store']);
+
+
+
 
 /*Route::get('/ping', [PingController::class, 'ping']);
 Route::get('/ping/health', [PingController::class, 'health']);
