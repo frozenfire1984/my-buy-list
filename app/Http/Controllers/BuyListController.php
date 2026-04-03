@@ -13,6 +13,11 @@ class BuyListController extends Controller
         return view('buy-list', [
             'items' => $items,
             'count' => $count,
+            'meta' => [
+                'title' => "Items page",
+                'description' => "Lorem ipsum dolor sit amet",
+                'keywords' => "Lorem, ipsum, dolor, sit, amet"
+            ]
         ]);
     }
 
