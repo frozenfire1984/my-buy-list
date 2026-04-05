@@ -24,7 +24,17 @@ Route::get('/buy-list', [BuyListController::class, 'index']);
 
 Route::get('/buy-list-details/{id}', [BuyListController::class, 'show']);
 
-Route::post('/buy-list', [BuyListController::class, 'store']);
+Route::get('/buy-list-create', [BuyListController::class, 'create']);
+
+
+
+Route::post('/buy-list-create', [BuyListController::class, 'store']);
+
+Route::get('/buy-list-edit/{id}', [BuyListController::class, 'edit']);
+
+Route::put('/buy-list/{id}', [BuyListController::class, 'update']);
+
+Route::delete('/buy-list/{id}', [BuyListController::class, 'destroy']);
 
 
 

@@ -1,0 +1,47 @@
+.app-nav {
+    ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+
+    a {
+        color: blue;
+        text-decoration: underline;
+    }
+}
+
+.app-title {
+
+}
+
+.app-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    li {
+        display: flex;
+        justify-content: space-between;
+    }
+}
+
+.app-btn {
+    display: flex;
+    background-color: rgba(206, 212, 218, 0.32);
+    padding: 10px;
+    border-radius: 6px;
+    width: fit-content;
+    cursor: pointer;
+}
+
+
+
+hr {
+    border-top-color: #ccc;
+}
+
+ol {
+    list-style: revert;
+    list-style-position: inside;
+}

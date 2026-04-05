@@ -1,34 +1,25 @@
 @extends("layouts.app")
 
-@section("title")
-    <h1>List of items</h1>
-@endsection
+@section("title", "List of items")
 
 @section("content")
-    <p>Count of items {{ $count }}</p>
-    <ul>
-        @foreach($items as $item)
-            <li><a href="/buy-list-details/{{$item->id}}">{{ $item->name }}</a></li>
-        @endforeach
-    </ul>
+    <div class="layout-stack">
 
-    <hr>
-    <form method="POST" action="/buy-list">
-        @csrf
-        <div>
-            <input type="text" name="name" value="{{ old('name') }}">
-            @error('name')
-            <div style="color: red">{{ $message }}</div>
-            @enderror
-        </div>
-        <div>
-            <input type="text" name="price" value="{{ old('price') }}">
-            @error('price')
-            <div style="color: red">{{ $message }}</div>
-            @enderror
-        </div>
-        <hr>
-        <button type="submit">Create</button>
-    </form>
-    @include('partials.flash')
+        <p>Count of items {{ $count }}</p>
+        <a class="app-btn" href="/buy-list-create">Create new item</a>
+
+        @if(session('success'))
+            <div>{{ session('success') }}</div>
+        @endif
+
+        <ol class="app-list">
+            @foreach($items as $item)
+                <li>
+                    <a href="/buy-list-details/{{$item->id}}">{{ $item->name }}</a>
+                    <a class="app-btn" href="/buy-list-edit/{{$item->id}}">Edit</a>
+                </li>
+            @endforeach
+        </ol>
+
+    </div>
 @endsection

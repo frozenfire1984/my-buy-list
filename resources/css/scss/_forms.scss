@@ -1,0 +1,13 @@
+.app-fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    &__title {
+        font-weight: 700;
+    }
+}
+
+.app-input {
+    border: 1px #ccc solid;
+}

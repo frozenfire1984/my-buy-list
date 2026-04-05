@@ -16,8 +16,8 @@ class BuyListController extends Controller
             'meta' => [
                 'title' => "Items page",
                 'description' => "Lorem ipsum dolor sit amet",
-                'keywords' => "Lorem, ipsum, dolor, sit, amet"
-            ]
+                'keywords' => "Lorem, ipsum, dolor, sit, amet",
+            ],
         ]);
     }
 
@@ -26,6 +26,10 @@ class BuyListController extends Controller
         return view('buy-list-details', [
             'item' => $item,
         ]);
+    }
+
+    public function create () {
+        return view('buy-list-create');
     }
 
     public function store (Request $request) {
@@ -39,5 +43,32 @@ class BuyListController extends Controller
             'price' => $request->price,
         ]);
         return redirect('/buy-list')->with('success', 'Товар успешно добавлен');
+    }
+
+    public function edit($id) {
+        $item = Item::findOrFail($id);
+        return view('buy-list-edit', ['item' => $item]);
+    }
+
+    public function update (Request $request, $id) {
+        $validated = $request->validate([
+            'name' => 'required|min:2|max:10',
+            'price' => 'nullable|numeric|min:0',
+        ]);
+
+        $item = Item::findOrFail($id);
+
+        $item->update($validated);
+
+        return redirect('/buy-list')->with('success', 'Товар успешно обновлен');
+    }
+
+    public function destroy (Request $request, $id) {
+        $item = Item::findOrFail($id);
+
+        $item->delete();
+
+        return redirect('/buy-list')->with('success', 'Товар успешно удален');
+
     }
 }

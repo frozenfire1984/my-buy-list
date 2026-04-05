@@ -8,33 +8,40 @@
         <meta name="description" content="{{ $meta['description'] ?? '' }}">
         <meta name="keywords" content="{{ $meta['keywords'] ?? '' }}">
 
-        <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+
+        @vite(['resources/css/app.css', 'resources/css/scss/index.scss', 'resources/js/app.js'])
     </head>
-    <body class="bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1b1b18] flex p-6 lg:p-8 items-center lg:justify-center min-h-screen flex-col">
+    <body>
         <header>
-            <nav>
-                <ul>
-                    @if(!request()->is('/'))
-                        <li><a href="/">Home</a></li>
-                    @endif
-                    <li><a href="/buy-list">Buy List</a></li>
-                    <li><a href="/about">About Us</a></li>
-                    <li><a href="/contacts">Contacts</a></li>
-                </ul>
-            </nav>
+            <div class="container">
+                <nav class="app-nav">
+                    <ul>
+                        @if(!request()->is('/'))
+                            <li><a href="/">Home</a></li>
+                        @endif
+                        <li><a href="/buy-list">Buy List</a></li>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/contacts">Contacts</a></li>
+                    </ul>
+                </nav>
+            </div>
         </header>
 
         <main>
-            @yield("title")
-            <hr>
-            @yield("content")
+            <div class="container">
+                @hasSection("title")
+                    <h1 class="app-title mb-4">@yield("title")</h1>
+                @endif
+                @yield("content")
+            </div>
         </main>
 
         <footer>
-            <hr>
-            copyright
+            <div class="container">
+                copyright
+            </div>
         </footer>
     </body>
 </html>

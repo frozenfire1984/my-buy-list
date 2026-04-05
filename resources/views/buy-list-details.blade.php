@@ -1,8 +1,6 @@
 @extends("layouts.app")
 
-@section("title")
-    <h1>Details page</h1>
-@endsection
+@section("title", "Details page")
 
 @section("content")
     <a href="/buy-list">Back</a>
@@ -14,5 +12,11 @@
             <p>price: {{ $item->price }}</p>
         @endif
         <p>added: {{ $item->created_at->format('d.m.Y H:i') }}</p>
+        <a class="app-btn" href="/buy-list-edit/{{$item->id}}">Edit</a>
+        <form method="POST" action="/buy-list/{{ $item->id }}">
+            @csrf
+            @method('DELETE')
+            <button class="app-btn" type="submit">Delete</button>
+        </form>
     </article>
 @endsection

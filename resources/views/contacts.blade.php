@@ -1,8 +1,6 @@
 @extends("layouts.app")
 
-@section("title")
-    <h1>Contacts</h1>
-@endsection
+@section("title", "Contacts")
 
 @section("content")
     <section>

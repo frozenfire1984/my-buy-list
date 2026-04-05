@@ -1,0 +1,18 @@
+body {
+    font-size: 16px;
+}
+
+/* region h1-h6 */
+$headings: (h1, h2, h3, h4, h5, h6);
+$base: 2.5rem;
+$step: 0.25rem;
+
+@for $i from 1 through length($headings) {
+    #{nth($headings, $i)} {
+        font-size: $base - ($step * ($i - 1));
+        font-weight: 700;
+        line-height: 1.2;
+        margin-bottom: 1em;
+    }
+}
+/* endregion */
