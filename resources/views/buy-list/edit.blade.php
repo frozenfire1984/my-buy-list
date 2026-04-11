@@ -9,6 +9,14 @@
             <div class="app-fieldset__title">Edit Item</div>
             @csrf
             <div>
+                <select name="category_id">
+                    <option value="">— Без категории —</option>
+                    @foreach($categories as $category)
+                        <option value="{{$category->id}}" {{ $item->category_id == $category->id ? 'selected' : '' }}> {{ $category->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div>
                 <input class="app-input" type="text" name="name" value="{{ old('name', $item->name ?? '') }}">
                 @error('name')
                 <div style="color: red">{{ $message }}</div>

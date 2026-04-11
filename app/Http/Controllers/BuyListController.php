@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Item;
 
@@ -29,31 +30,43 @@ class BuyListController extends Controller
     }
 
     public function create () {
-        return view('buy-list.create');
+
+        $categories = Category::all();
+        return view('buy-list.create', [
+            'categories' => $categories,
+        ]);
     }
 
     public function store (Request $request) {
         $request->validate([
-            'name' => 'required|min:2|max:10',
+            'name' => 'required|min:2|max:50',
             'price' => 'nullable|numeric|min:0',
+            'category_id' => 'nullable|exists:categories,id',
         ]);
 
         Item::create([
             'name' => $request->name,
             'price' => $request->price,
+            'category_id' => $request->category_id,
         ]);
         return redirect('/buy-list')->with('success', 'Товар успешно добавлен');
     }
 
     public function edit($id) {
         $item = Item::findOrFail($id);
-        return view('buy-list.edit', ['item' => $item]);
+        $categories = Category::all();
+
+        return view('buy-list.edit', [
+            'item' => $item,
+            'categories' => $categories,
+        ]);
     }
 
     public function update (Request $request, $id) {
         $validated = $request->validate([
-            'name' => 'required|min:2|max:10',
+            'name' => 'required|min:2|max:50',
             'price' => 'nullable|numeric|min:0',
+            'category_id' => 'nullable|exists:categories,id',
         ]);
 
         $item = Item::findOrFail($id);

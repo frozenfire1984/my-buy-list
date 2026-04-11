@@ -13,9 +13,9 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        Category::create(['name' => 'Бакалея', 'description' => 'Какое-то описание']);
-        Category::create(['name' => 'Молочка', 'description' => 'Какое-то описание']);
-        Category::create(['name' => 'Пекарня', 'description' => 'Какое-то описание']);
-        Category::create(['name' => 'Мясо', 'description' => 'Какое-то описание']);
+        Category::firstOrCreate(['name' => 'Алкоголь'], ['description' => 'Какое-то описание']);
+        Category::firstOrCreate(['name' => 'Хозтовары'], ['description' => 'Какое-то описание']);
+        Category::firstOrCreate(['name' => 'Химия'], ['description' => 'Какое-то описание']);
+        Category::firstOrCreate(['name' => 'Авто-товары'], ['description' => 'Какое-то описание']);
     }
 }

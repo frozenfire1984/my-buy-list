@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
 {
@@ -32,8 +33,8 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|min:2|max:10',
-            'description' => 'nullable|min:0',
+            'name' => ['required', 'min:2', 'max:50', Rule::unique('categories', 'name')],
+            'description' => 'nullable',
         ]);
 
         Category::create([
@@ -71,8 +72,8 @@ class CategoryController extends Controller
     public function update(Request $request, string $id)
     {
         $validated = $request->validate([
-            'name' => 'required|min:2|max:10',
-            'description' => 'nullable|min:0',
+            'name' => ['required', 'min:2', 'max:50', Rule::unique('categories', 'name')->ignore($id)],
+            'description' => 'nullable',
         ]);
 
         $category = Category::findOrFail($id);

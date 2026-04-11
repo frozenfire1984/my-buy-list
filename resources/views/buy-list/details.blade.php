@@ -11,6 +11,9 @@
         @if($item->price !== null)
             <p>price: {{ $item->price }}</p>
         @endif
+        @if($item->category)
+            <p>category: {{ $item->category->name }}</p>
+        @endif
         <p>added: {{ $item->created_at->format('d.m.Y H:i') }}</p>
 
         <hr>

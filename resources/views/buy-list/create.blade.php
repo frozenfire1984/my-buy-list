@@ -7,6 +7,16 @@
         <div class="app-fieldset">
             <div class="app-fieldset__title">Create Item</div>
             @csrf
+
+            <div>
+                <select name="category_id">
+                    <option value="">— Без категории —</option>
+                    @foreach($categories as $category)
+                        <option value="{{$category->id}}"> {{ $category->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
             <div>
                 <input class="app-input" type="text" name="name" value="{{ old('name') }}">
                 @error('name')

@@ -9,8 +9,6 @@ class Item extends Model
 {
     use HasFactory;
 
-
-
     /*
      *
      *
@@ -23,6 +21,12 @@ class Item extends Model
      *
      *
      */
+    protected $fillable = ["name", "price", "category_id"];
 
-    protected $fillable = ["name", "price"];
+    public function category () {
+        return $this->belongsTo(Category::class);
+
+    }
+
+
 }
