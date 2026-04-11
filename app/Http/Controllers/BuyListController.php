@@ -10,7 +10,7 @@ class BuyListController extends Controller
     public function index() {
         $items = Item::all();
         $count = $items->count();
-        return view('buy-list', [
+        return view('buy-list.index', [
             'items' => $items,
             'count' => $count,
             'meta' => [
@@ -23,13 +23,13 @@ class BuyListController extends Controller
 
     public function show($id) {
         $item = Item::findOrFail($id);
-        return view('buy-list-details', [
+        return view('buy-list.details', [
             'item' => $item,
         ]);
     }
 
     public function create () {
-        return view('buy-list-create');
+        return view('buy-list.create');
     }
 
     public function store (Request $request) {
@@ -47,7 +47,7 @@ class BuyListController extends Controller
 
     public function edit($id) {
         $item = Item::findOrFail($id);
-        return view('buy-list-edit', ['item' => $item]);
+        return view('buy-list.edit', ['item' => $item]);
     }
 
     public function update (Request $request, $id) {

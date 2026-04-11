@@ -12,7 +12,10 @@
             <p>price: {{ $item->price }}</p>
         @endif
         <p>added: {{ $item->created_at->format('d.m.Y H:i') }}</p>
-        <a class="app-btn" href="/buy-list-edit/{{$item->id}}">Edit</a>
+
+        <hr>
+
+        <a class="app-btn" href="/buy-list/{{$item->id}}/edit">Edit</a>
         <form method="POST" action="/buy-list/{{ $item->id }}">
             @csrf
             @method('DELETE')

@@ -22,6 +22,7 @@
                             <li><a href="/">Home</a></li>
                         @endif
                         <li><a href="/buy-list">Buy List</a></li>
+                        <li><a href="/categories">Categories</a></li>
                         <li><a href="/about">About Us</a></li>
                         <li><a href="/contacts">Contacts</a></li>
                     </ul>

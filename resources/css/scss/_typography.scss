@@ -16,3 +16,8 @@ $step: 0.25rem;
     }
 }
 /* endregion */
+
+a:not(.app-btn) {
+    color: blue;
+    text-decoration: underline;
+}

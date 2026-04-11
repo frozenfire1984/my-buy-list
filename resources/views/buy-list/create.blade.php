@@ -3,7 +3,7 @@
 @section("title", "Create Item")
 
 @section("content")
-    <form method="POST" action="/buy-list-create">
+    <form method="POST" action="/buy-list">
         <div class="app-fieldset">
             <div class="app-fieldset__title">Create Item</div>
             @csrf

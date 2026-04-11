@@ -6,7 +6,7 @@
     <div class="layout-stack">
 
         <p>Count of items {{ $count }}</p>
-        <a class="app-btn" href="/buy-list-create">Create new item</a>
+        <a class="app-btn" href="/buy-list/create">Create new item</a>
 
         @if(session('success'))
             <div>{{ session('success') }}</div>
@@ -15,8 +15,8 @@
         <ol class="app-list">
             @foreach($items as $item)
                 <li>
-                    <a href="/buy-list-details/{{$item->id}}">{{ $item->name }}</a>
-                    <a class="app-btn" href="/buy-list-edit/{{$item->id}}">Edit</a>
+                    <a href="/buy-list/{{$item->id}}/details">{{ $item->name }}</a>
+                    <a class="app-btn" href="/buy-list/{{$item->id}}/edit">Edit</a>
                 </li>
             @endforeach
         </ol>
