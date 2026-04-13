@@ -26,6 +26,12 @@
     }
 }
 
+.app-btn-group {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
 .app-btn {
     display: flex;
     background-color: rgba(206, 212, 218, 0.32);

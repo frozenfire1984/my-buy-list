@@ -3,6 +3,10 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +23,34 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        /* for output into browser use dump instead Log::debug */
+        app()->booted(function () {
+            $request = app(Request::class);
+
+            if (str_contains($request->url(), '.well-known')) {
+                return;
+            }
+
+            $startTime = microtime(true);
+            $queryCount = 0;
+
+            Log::info('');
+            Log::info('');
+            Log::debug('>>> ' . $request->method() . ' ' . $request->url());
+
+
+            DB::listen(function ($query) use (&$queryCount) {
+                $queryCount++;
+                Log::debug($query->sql, [
+                    'bindings' => $query->bindings,
+                    'time'     => $query->time . 'ms',
+                ]);
+            });
+
+            app()->terminating(function () use ($startTime, &$queryCount) {
+                $totalTime = round((microtime(true) - $startTime) * 1000, 2);
+                Log::debug("<<< total: {$queryCount} queries, {$totalTime}ms");
+            });
+        });
     }
 }

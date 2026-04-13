@@ -9,7 +9,8 @@ use App\Models\Item;
 class BuyListController extends Controller
 {
     public function index() {
-        $items = Item::all();
+        //$items = Item::all();
+        $items = Item::with('category')->get();
         $count = $items->count();
         return view('buy-list.index', [
             'items' => $items,
@@ -30,7 +31,6 @@ class BuyListController extends Controller
     }
 
     public function create () {
-
         $categories = Category::all();
         return view('buy-list.create', [
             'categories' => $categories,

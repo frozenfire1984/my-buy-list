@@ -18,11 +18,13 @@
 
         <hr>
 
-        <a class="app-btn" href="/buy-list/{{$item->id}}/edit">Edit</a>
-        <form method="POST" action="/buy-list/{{ $item->id }}">
-            @csrf
-            @method('DELETE')
-            <button class="app-btn" type="submit">Delete</button>
-        </form>
+        <div class="app-btn-group">
+            <a class="app-btn" href="/buy-list/{{$item->id}}/edit">Edit</a>
+            <form method="POST" action="/buy-list/{{ $item->id }}">
+                @csrf
+                @method('DELETE')
+                <button class="app-btn" type="submit">Delete</button>
+            </form>
+        </div>
     </article>
 @endsection

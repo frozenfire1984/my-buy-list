@@ -15,7 +15,10 @@
         <ol class="app-list">
             @foreach($items as $item)
                 <li>
-                    <a href="/buy-list/{{$item->id}}/details">{{ $item->name }}</a>
+                    <div>
+                    <b><a href="/buy-list/{{$item->id}}/details">{{ $item->name }}</a></b><br>
+                        cat: <em>{{ $item->category?->name ?? "--без категории--" }}</em>
+                    </div>
                     <a class="app-btn" href="/buy-list/{{$item->id}}/edit">Edit</a>
                 </li>
             @endforeach

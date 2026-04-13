@@ -10,6 +10,13 @@ export default defineConfig({
         }),
         tailwindcss(),
     ],
+    css: {
+        preprocessorOptions: {
+            scss: {
+                silenceDeprecations: ['import', 'global-builtin'], //chore: silence Sass deprecation warnings until migration to @use/@forward
+            },
+        },
+    },
     server: {
         watch: {
             ignored: ['**/storage/framework/views/**'],
