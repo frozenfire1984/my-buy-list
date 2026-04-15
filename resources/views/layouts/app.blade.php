@@ -3,46 +3,34 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name') }} {{ $meta['title'] ?? '' }}</title>
-        <meta name="description" content="{{ $meta['description'] ?? '' }}">
-        <meta name="keywords" content="{{ $meta['keywords'] ?? '' }}">
+        <title>{{ config('app.name', 'Laravel') }}</title>
 
+        <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-        @vite(['resources/css/app.css', 'resources/css/scss/index.scss', 'resources/js/app.js'])
+        <!-- Scripts -->
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body>
-        <header>
-            <div class="container">
-                <nav class="app-nav">
-                    <ul>
-                        @if(!request()->is('/'))
-                            <li><a href="/">Home</a></li>
-                        @endif
-                        <li><a href="/buy-list">Buy List</a></li>
-                        <li><a href="/categories">Categories</a></li>
-                        <li><a href="/about">About Us</a></li>
-                        <li><a href="/contacts">Contacts</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </header>
+    <body class="font-sans antialiased">
+        <div class="min-h-screen bg-gray-100">
+            @include('layouts.navigation')
 
-        <main>
-            <div class="container">
-                @hasSection("title")
-                    <h1 class="app-title mb-4">@yield("title")</h1>
-                @endif
-                @yield("content")
-            </div>
-        </main>
+            <!-- Page Heading -->
+            @isset($header)
+                <header class="bg-white shadow">
+                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                        {{ $header }}
+                    </div>
+                </header>
+            @endisset
 
-        <footer>
-            <div class="container">
-                copyright
-            </div>
-        </footer>
+            <!-- Page Content -->
+            <main>
+                {{ $slot }}
+            </main>
+        </div>
     </body>
 </html>

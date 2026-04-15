@@ -1,5 +1,5 @@
-@layer components {
-    @layer app_typography, app_layout, app_components, app_forms;
+@layer app {
+    @layer app_typography, app_layout, app_components, app_forms, app_container;
 
     @layer app_typography {
         @import "typography";
@@ -16,8 +16,8 @@
     @layer app_components {
         @import "components";
     }
-}
 
-@layer utilities {
-    @import "container";
+    @layer app_container {
+        @import "container";
+    }
 }

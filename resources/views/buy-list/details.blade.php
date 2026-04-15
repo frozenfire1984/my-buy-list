@@ -1,4 +1,4 @@
-@extends("layouts.app")
+@extends("layouts.main")
 
 @section("title", "Details page")
 
@@ -17,7 +17,7 @@
         <p>added: {{ $item->created_at->format('d.m.Y H:i') }}</p>
 
         <hr>
-
+        @auth
         <div class="app-btn-group">
             <a class="app-btn" href="/buy-list/{{$item->id}}/edit">Edit</a>
             <form method="POST" action="/buy-list/{{ $item->id }}">
@@ -26,5 +26,6 @@
                 <button class="app-btn" type="submit">Delete</button>
             </form>
         </div>
+        @endauth
     </article>
 @endsection
