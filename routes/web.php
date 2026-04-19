@@ -39,7 +39,21 @@ Route::prefix('buy-list')->group(function() {
 
 Route::prefix('buy-list')->middleware('auth')->group(function() {
     Route::get('/create', [BuyListController::class, 'create']);
+
     Route::post('/', [BuyListController::class, 'store']);
+    /*
+     *
+     *   BuyListController::class
+    // вернёт строку: "App\Http\Controllers\BuyListController"
+     *
+    Route::post('/', function() {
+      $request = new Request(); // сам создал
+      $controller = new BuyListController();
+      $controller->store($request); // сам передал
+    });
+     */
+
+
     Route::get('/{id}/edit', [BuyListController::class, 'edit']);
     Route::put('/{id}', [BuyListController::class, 'update']);
     Route::delete('/{id}', [BuyListController::class, 'destroy']);

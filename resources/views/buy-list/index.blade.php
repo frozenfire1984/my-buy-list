@@ -8,6 +8,10 @@
         <p>Count of items {{ $count }}</p>
         <a class="app-btn" href="/buy-list/create">Create new item</a>
 
+        @if(session('error'))
+            <div>{{ session('error') }}</div>
+        @endif
+
         @if(session('success'))
             <div>{{ session('success') }}</div>
         @endif

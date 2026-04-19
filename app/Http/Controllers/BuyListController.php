@@ -5,12 +5,29 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Item;
+use Exception;
+use Illuminate\Support\Facades\Log;
+
 
 class BuyListController extends Controller
 {
     public function index() {
+
+
+        try {
+            //throw new \Exception("тест!");
+            $items = Item::with('category')->get();
+            $count = $items->count();
+            return view('buy-list.index', compact('items', 'count'));
+        } catch(Exception $e) {
+            Log::error('Не удалось загрузить товары: ' . $e->getMessage());
+            throw $e;
+        } finally {
+            Log::info('index() выполнен');
+        }
+
         //$items = Item::all();
-        $items = Item::with('category')->get();
+        /*$items = Item::with('category')->get();
         $count = $items->count();
         return view('buy-list.index', [
             'items' => $items,
@@ -20,14 +37,23 @@ class BuyListController extends Controller
                 'description' => "Lorem ipsum dolor sit amet",
                 'keywords' => "Lorem, ipsum, dolor, sit, amet",
             ],
-        ]);
+        ]);*/
     }
 
     public function show($id) {
-        $item = Item::findOrFail($id);
-        return view('buy-list.details', [
-            'item' => $item,
-        ]);
+        try {
+            //throw new \Exception("тест!");
+            $item = Item::findOrFail($id);
+            return view('buy-list.details', [
+                'item' => $item,
+            ]);
+        } catch(Exception $e) {
+            Log::error('Не удалось загрузить детальный вид: ' . $e->getMessage());
+            //throw $e;
+            return redirect()->back()->with('error', 'Не удалось загрузить детальный вид');
+        } finally {
+            Log::info('show() выполнен');
+        }
     }
 
     public function create () {
