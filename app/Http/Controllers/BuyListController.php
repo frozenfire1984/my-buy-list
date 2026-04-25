@@ -48,7 +48,7 @@ class BuyListController extends Controller
                 'item' => $item,
             ]);
         } catch(Exception $e) {
-            Log::error('Не удалось загрузить детальный вид: ' . $e->getMessage());
+            //Log::error('Не удалось загрузить детальный вид: ' . $e->getMessage());
             //throw $e;
             return redirect()->back()->with('error', 'Не удалось загрузить детальный вид');
         } finally {

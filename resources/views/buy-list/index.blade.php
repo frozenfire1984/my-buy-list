@@ -28,5 +28,8 @@
             @endforeach
         </ol>
 
+
+        <a href="/buy-list/7000/details">Broken item</a>
+
     </div>
 @endsection

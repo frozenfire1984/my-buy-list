@@ -25,6 +25,7 @@
                 <li><a href="/categories">Categories</a></li>
                 <li><a href="/about">About Us</a></li>
                 <li><a href="/contacts">Contacts</a></li>
+                <li><a href="/login">Login</a></li>
             </ul>
         </nav>
     </div>
