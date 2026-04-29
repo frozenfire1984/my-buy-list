@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Item;
+use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Gate;
 
 
 class BuyListController extends Controller
@@ -16,7 +18,7 @@ class BuyListController extends Controller
 
         try {
             //throw new \Exception("тест!");
-            $items = Item::with('category')->get();
+            $items = Item::with('category')->where('user_id', auth()->id())->get();
             $count = $items->count();
             return view('buy-list.index', compact('items', 'count'));
         } catch(Exception $e) {
@@ -73,13 +75,17 @@ class BuyListController extends Controller
         Item::create([
             'name' => $request->name,
             'price' => $request->price,
+            'user_id' => auth()->id(),
             'category_id' => $request->category_id,
         ]);
-        return redirect('/buy-list')->with('success', 'Товар успешно добавлен');
+        //return redirect('/buy-list')->with('success', 'Товар успешно добавлен');
+        return redirect()->route('buy-list.index')->with('success', 'Товар успешно добавлен');
     }
 
     public function edit($id) {
+
         $item = Item::findOrFail($id);
+        Gate::authorize('update-item', $item);
         $categories = Category::all();
 
         return view('buy-list.edit', [
@@ -97,17 +103,18 @@ class BuyListController extends Controller
 
         $item = Item::findOrFail($id);
 
-        $item->update($validated);
 
-        return redirect('/buy-list')->with('success', 'Товар успешно обновлен');
+        Gate::authorize('update-item', $item);
+        $item->update($validated);
+        return redirect()->route('buy-list.index')->with('success', 'Товар успешно обновлен');
     }
 
     public function destroy (Request $request, $id) {
         $item = Item::findOrFail($id);
-
+        Gate::authorize('update-item', $item);
         $item->delete();
 
-        return redirect('/buy-list')->with('success', 'Товар успешно удален');
+        return redirect()->route('buy-list.index')->with('success', 'Товар успешно удален');
 
     }
 }

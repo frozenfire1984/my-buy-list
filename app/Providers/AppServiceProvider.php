@@ -5,7 +5,10 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Item;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -52,5 +55,10 @@ class AppServiceProvider extends ServiceProvider
                 Log::debug("<<< total: {$queryCount} queries, {$totalTime}ms");
             });
         });
+
+        Gate::define('update-item', function (User $user, Item $item) {
+            return $user->id === $item->user_id;
+        });
+
     }
 }

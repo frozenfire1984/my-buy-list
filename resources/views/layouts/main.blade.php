@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name') }} {{ $meta['title'] ?? '' }}</title>
     <meta name="description" content="{{ $meta['description'] ?? '' }}">
     <meta name="keywords" content="{{ $meta['keywords'] ?? '' }}">
@@ -21,11 +21,18 @@
                 @if(!request()->is('/'))
                     <li><a href="/">Home</a></li>
                 @endif
-                <li><a href="/buy-list">Buy List</a></li>
+                <li><a href="{{route('buy-list.index')}}">Buy List</a></li>
                 <li><a href="/categories">Categories</a></li>
                 <li><a href="/about">About Us</a></li>
                 <li><a href="/contacts">Contacts</a></li>
-                <li><a href="/login">Login</a></li>
+                @if(Auth::user())
+                    <li style="margin-left: auto;"><a href="/dashboard">Profile</a></li>
+                @else
+                    <li><a href="/login">Login</a></li>
+                @endif
+                @if(Auth::user())
+                    <li>{{Auth::user()->name}}</li>
+                @endif
             </ul>
         </nav>
     </div>

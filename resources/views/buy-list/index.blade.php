@@ -6,7 +6,7 @@
     <div class="layout-stack">
 
         <p>Count of items {{ $count }}</p>
-        <a class="app-btn" href="/buy-list/create">Create new item</a>
+        <a class="app-btn" href="{{ route('buy-list.create') }}">Create new item</a>
 
         @if(session('error'))
             <div>{{ session('error') }}</div>
@@ -20,10 +20,10 @@
             @foreach($items as $item)
                 <li>
                     <div>
-                    <b><a href="/buy-list/{{$item->id}}/details">{{ $item->name }}</a></b><br>
+                    <b><a href="{{ route('buy-list.show', ['id' => $item->id]) }}">{{ $item->name }}</a></b><br>
                         cat: <em>{{ $item->category?->name ?? "--без категории--" }}</em>
                     </div>
-                    <a class="app-btn" href="/buy-list/{{$item->id}}/edit">Edit</a>
+                    <a class="app-btn" href="{{ route('buy-list.edit', ['id' => $item->id]) }}">Edit</a>
                 </li>
             @endforeach
         </ol>

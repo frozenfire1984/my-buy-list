@@ -3,7 +3,7 @@
 @section("title", "Edit Item")
 
 @section("content")
-    <form method="POST" action="/buy-list/{{ $item->id }}">
+    <form method="POST" action="{{ route('buy-list.update', ['id' => $item->id]) }}">
         @method('PUT')
         <div class="app-fieldset">
             <div class="app-fieldset__title">Edit Item</div>

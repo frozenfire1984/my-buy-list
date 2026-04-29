@@ -3,7 +3,7 @@
 @section("title", "Create Item")
 
 @section("content")
-    <form method="POST" action="/buy-list">
+    <form method="POST" action="{{route('buy-list.store')}}">
         <div class="app-fieldset">
             <div class="app-fieldset__title">Create Item</div>
             @csrf

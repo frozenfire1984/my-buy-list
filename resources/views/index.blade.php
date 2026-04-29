@@ -8,7 +8,7 @@
             <ul>
             @foreach($top_items as $item)
                 <li>
-                    <a href="/buy-list/{{$item->id}}/details">{{ $item->name }}</a>
+                    <a href="{{route('buy-list.show', ['id' => $item->id])}}">{{ $item->name }}</a>
                 </li>
             @endforeach
             </ul>

@@ -32,15 +32,19 @@ Route::get('/contacts', function () {
 // endregion
 
 // region Items
-Route::prefix('buy-list')->group(function() {
-    Route::get('/', [BuyListController::class, 'index']);
-    Route::get('/{id}/details', [BuyListController::class, 'show']);
+Route::prefix('items')->group(function() {
+    Route::get('/', [BuyListController::class, 'index'])->name('buy-list.index');
+    Route::get('/{id}/details', [BuyListController::class, 'show'])->name('buy-list.show');;
 });
 
-Route::prefix('buy-list')->middleware('auth')->group(function() {
-    Route::get('/create', [BuyListController::class, 'create']);
+Route::prefix('items')->middleware('auth')->group(function() {
+    Route::get('/create', [BuyListController::class, 'create'])->name('buy-list.create');
+    Route::post('/', [BuyListController::class, 'store'])->name('buy-list.store');
+    Route::get('/{id}/edit', [BuyListController::class, 'edit'])->name('buy-list.edit');
+    Route::put('/{id}', [BuyListController::class, 'update'])->name('buy-list.update');
+    Route::delete('/{id}', [BuyListController::class, 'destroy'])->name('buy-list.destroy');
 
-    Route::post('/', [BuyListController::class, 'store']);
+
     /*
      *
      *   BuyListController::class
@@ -54,9 +58,7 @@ Route::prefix('buy-list')->middleware('auth')->group(function() {
      */
 
 
-    Route::get('/{id}/edit', [BuyListController::class, 'edit']);
-    Route::put('/{id}', [BuyListController::class, 'update']);
-    Route::delete('/{id}', [BuyListController::class, 'destroy']);
+
 });
 // endregion
 

@@ -3,7 +3,7 @@
 @section("title", "Details page")
 
 @section("content")
-    <a href="/buy-list">Back</a>
+    <a href="{{route('buy-list.index')}}">Back</a>
     <br><br>
 
     <article>
@@ -19,8 +19,8 @@
         <hr>
         @auth
         <div class="app-btn-group">
-            <a class="app-btn" href="/buy-list/{{$item->id}}/edit">Edit</a>
-            <form method="POST" action="/buy-list/{{ $item->id }}">
+            <a class="app-btn" href="{{ route('buy-list.edit', ['id' => $item->id]) }}">Edit</a>
+            <form method="POST" action="{{ route('buy-list.destroy', ['id' => $item->id]) }}">
                 @csrf
                 @method('DELETE')
                 <button class="app-btn" type="submit">Delete</button>
