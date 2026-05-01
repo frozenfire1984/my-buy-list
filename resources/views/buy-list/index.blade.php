@@ -5,8 +5,15 @@
 @section("content")
     <div class="layout-stack">
 
+        @if($message ?? false)
+            <div><em><b>{{ $message }}</b></em></div>
+        @endif
+
         <p>Count of items {{ $count }}</p>
-        <a class="app-btn" href="{{ route('buy-list.create') }}">Create new item</a>
+
+        @can('create-item', Auth::user())
+            <a class="app-btn" href="{{ route('buy-list.create') }}">Create new item</a>
+        @endcan
 
         @if(session('error'))
             <div>{{ session('error') }}</div>

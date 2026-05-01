@@ -34,10 +34,11 @@ Route::get('/contacts', function () {
 // region Items
 Route::prefix('items')->group(function() {
     Route::get('/', [BuyListController::class, 'index'])->name('buy-list.index');
-    Route::get('/{id}/details', [BuyListController::class, 'show'])->name('buy-list.show');;
+    Route::get('/{id}/details', [BuyListController::class, 'show'])->name('buy-list.show');
 });
 
 Route::prefix('items')->middleware('auth')->group(function() {
+    //Route::get('/{id}/details', [BuyListController::class, 'show'])->name('buy-list.show');
     Route::get('/create', [BuyListController::class, 'create'])->name('buy-list.create');
     Route::post('/', [BuyListController::class, 'store'])->name('buy-list.store');
     Route::get('/{id}/edit', [BuyListController::class, 'edit'])->name('buy-list.edit');

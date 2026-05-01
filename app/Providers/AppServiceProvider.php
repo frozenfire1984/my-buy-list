@@ -60,5 +60,13 @@ class AppServiceProvider extends ServiceProvider
             return $user->id === $item->user_id;
         });
 
+        Gate::define('view-item', function (?User $user, Item $item) {
+            return $item->user_id === null || $item->user_id === $user?->id;
+        });
+
+        Gate::define('create-item', function (User $user) {
+            return true;
+        });
+
     }
 }

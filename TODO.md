@@ -1,8 +1,8 @@
 # TODO / Learning Plan
 
 ## Следующий урок
-- [ ] Добавить `user_id` в таблицу `items` (новая миграция)
-- [ ] Gates и Policies — авторизация на уровне объектов (юзер может редактировать только свои товары)
+- [ ] Супер-админ — колонка is_admin в users, Gate::before() для обхода всех проверок
+- [ ] Policy — рефакторинг Gate на отдельный класс ItemPolicy (php artisan make:policy ItemPolicy --model=Item)
 - [ ] Slug — человекочитаемые URL (`/items/iphone-15-pro/details` вместо `/items/7/details`)
 
 ## Скоро
@@ -29,3 +29,11 @@
 - [x] bootstrap/app.php — точки входа, withRouting, withExceptions
 - [x] Artisan-команды, крон
 - [x] Named Routes — именованные роуты, route() хелпер
+- [x] user_id в items — миграция с foreignId, связи User hasMany Item / Item belongsTo User
+- [x] Gates — Gate::define() в AppServiceProvider, Gate::authorize() в контроллере
+- [x] Авторизация на уровне объектов — юзер видит/редактирует/удаляет только свои товары
+- [x] Session hijacking — теория, почему user_id нельзя брать из request
+- [x] fetch() DELETE из DevTools — как дёрнуть любой HTTP метод напрямую, CSRF-токен
+- [x] Gate на show() — view-item gate, ?User nullable для гостей, short-circuit evaluation в ||
+- [x] middleware('auth') на show — понял разницу: middleware перехватывает до Gate, редирект на логин
+- [x] Ничейные товары — $item->user_id === null || $user?->id === $item->user_id

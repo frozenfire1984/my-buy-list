@@ -6,6 +6,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Gate;
@@ -14,10 +15,20 @@ use Illuminate\Support\Facades\Gate;
 class BuyListController extends Controller
 {
     public function index() {
+        $message = "Hello guest";
 
+        if (auth()->check()) {
+            $items = Item::with('category')->where('user_id', auth()->id())->get();
+            $user_name = auth()->user()->name;
+            $message = "Hello " . $user_name;
+        } else {
+            $items = Item::with('category')->where('user_id', null)->get();
+        }
 
-        try {
-            //throw new \Exception("тест!");
+        $count = $items->count();
+        return view('buy-list.index', compact('items', 'count', 'message'));
+
+        /*try {
             $items = Item::with('category')->where('user_id', auth()->id())->get();
             $count = $items->count();
             return view('buy-list.index', compact('items', 'count'));
@@ -26,7 +37,7 @@ class BuyListController extends Controller
             throw $e;
         } finally {
             Log::info('index() выполнен');
-        }
+        }*/
 
         //$items = Item::all();
         /*$items = Item::with('category')->get();
@@ -43,19 +54,28 @@ class BuyListController extends Controller
     }
 
     public function show($id) {
-        try {
-            //throw new \Exception("тест!");
+
+        $item = Item::findOrFail($id);
+        Gate::authorize('view-item', $item);
+        return view('buy-list.details', [
+            'item' => $item,
+        ]);
+
+        /*try {
             $item = Item::findOrFail($id);
+            Gate::authorize('view-item', $item);
             return view('buy-list.details', [
                 'item' => $item,
             ]);
+        } catch(AuthorizationException $e) {
+            Log::error('Нет доступа: ' . $e->getMessage());
+            return redirect()->route('buy-list.index')->with('error', 'Нет доступа');
         } catch(Exception $e) {
-            //Log::error('Не удалось загрузить детальный вид: ' . $e->getMessage());
-            //throw $e;
+            Log::error('Не удалось загрузить детальный вид: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Не удалось загрузить детальный вид');
         } finally {
             Log::info('show() выполнен');
-        }
+        }*/
     }
 
     public function create () {
