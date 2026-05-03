@@ -37,3 +37,8 @@
 - [x] Gate на show() — view-item gate, ?User nullable для гостей, short-circuit evaluation в ||
 - [x] middleware('auth') на show — понял разницу: middleware перехватывает до Gate, редирект на логин
 - [x] Ничейные товары — $item->user_id === null || $user?->id === $item->user_id
+- [x] Gate::allows() vs Gate::authorize() — разница, когда что использовать
+- [x] @can / @auth в Blade — показ элементов в зависимости от прав
+- [x] Явный код vs неявный — if/else для разных выборок (авторизован / гость)
+- [x] auth()->user() вместо User::find(auth()->id()) — без лишнего SQL-запроса
+- [x] Prepared statements в логах — почему в SQL видно ? вместо реального значения

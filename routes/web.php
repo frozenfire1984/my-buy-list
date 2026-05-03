@@ -34,16 +34,18 @@ Route::get('/contacts', function () {
 // region Items
 Route::prefix('items')->group(function() {
     Route::get('/', [BuyListController::class, 'index'])->name('buy-list.index');
-    Route::get('/{id}/details', [BuyListController::class, 'show'])->name('buy-list.show');
+    //Route::get('/{id}/details', [BuyListController::class, 'show'])->name('buy-list.show');
 });
 
 Route::prefix('items')->middleware('auth')->group(function() {
-    //Route::get('/{id}/details', [BuyListController::class, 'show'])->name('buy-list.show');
+    Route::get('/{id}/details', [BuyListController::class, 'show'])->name('buy-list.show');
     Route::get('/create', [BuyListController::class, 'create'])->name('buy-list.create');
     Route::post('/', [BuyListController::class, 'store'])->name('buy-list.store');
     Route::get('/{id}/edit', [BuyListController::class, 'edit'])->name('buy-list.edit');
     Route::put('/{id}', [BuyListController::class, 'update'])->name('buy-list.update');
     Route::delete('/{id}', [BuyListController::class, 'destroy'])->name('buy-list.destroy');
+    Route::get('/{id}/claim', [BuyListController::class, 'claim'])->name('buy-list.claim');
+    Route::put('/{id}/claim', [BuyListController::class, 'claim_confirm'])->name('buy-list.claim_confirm');
 
 
     /*

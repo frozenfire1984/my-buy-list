@@ -17,12 +17,19 @@ class BuyListController extends Controller
     public function index() {
         $message = "Hello guest";
 
+
+        $items = Item::with('category')->where('user_id', null)->get();
+        $items->each(function($item) {
+            $item->is_free = true;
+
+        });
+
         if (auth()->check()) {
-            $items = Item::with('category')->where('user_id', auth()->id())->get();
+            $user_items = Item::with('category')->where('user_id', auth()->id())->get();
+
+            $items = $user_items->merge($items);
             $user_name = auth()->user()->name;
             $message = "Hello " . $user_name;
-        } else {
-            $items = Item::with('category')->where('user_id', null)->get();
         }
 
         $count = $items->count();
@@ -56,7 +63,7 @@ class BuyListController extends Controller
     public function show($id) {
 
         $item = Item::findOrFail($id);
-        Gate::authorize('view-item', $item);
+        Gate::authorize('view-item', $item); /* currently override by middleware auth */
         return view('buy-list.details', [
             'item' => $item,
         ]);
@@ -103,15 +110,41 @@ class BuyListController extends Controller
     }
 
     public function edit($id) {
-
         $item = Item::findOrFail($id);
-        Gate::authorize('update-item', $item);
-        $categories = Category::all();
 
+        if (Gate::denies('update-item', $item)) {
+            return redirect()->route('buy-list.claim', $id)->with('success', 'Подтвердите если хотите присвоить этот товар себе');
+        }
+
+        $categories = Category::all();
         return view('buy-list.edit', [
             'item' => $item,
             'categories' => $categories,
         ]);
+    }
+
+    public function claim($id) {
+        $item = Item::findOrFail($id);
+
+        if ($item->user_id !== null) {
+            return redirect()->route('buy-list.index')->with('error', 'Вы пытались присвоить чужой товар');
+        }
+
+        return view('buy-list.claim', [
+            'item' => $item,
+        ]);
+    }
+
+    public function claim_confirm($id) {
+        $item = Item::findOrFail($id);
+
+        if ($item->user_id !== null) {
+            return redirect()->route('buy-list.index')->with('error', 'Этот товар уже кто-то присвоил');
+        }
+
+        $item->user_id = auth()->id();
+        $item->save();
+        return redirect()->route('buy-list.edit', $id)->with('success', 'Товар успешно присвоен, теперь можите редактировать его');
     }
 
     public function update (Request $request, $id) {

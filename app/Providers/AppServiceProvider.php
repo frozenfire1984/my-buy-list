@@ -67,6 +67,5 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('create-item', function (User $user) {
             return true;
         });
-
     }
 }

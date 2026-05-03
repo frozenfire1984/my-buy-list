@@ -11,12 +11,12 @@
 
         <p>Count of items {{ $count }}</p>
 
-        @can('create-item', Auth::user())
+        @can('create-item')
             <a class="app-btn" href="{{ route('buy-list.create') }}">Create new item</a>
         @endcan
 
         @if(session('error'))
-            <div>{{ session('error') }}</div>
+            <div style="color: red;">{{ session('error') }}</div>
         @endif
 
         @if(session('success'))
@@ -29,6 +29,9 @@
                     <div>
                     <b><a href="{{ route('buy-list.show', ['id' => $item->id]) }}">{{ $item->name }}</a></b><br>
                         cat: <em>{{ $item->category?->name ?? "--без категории--" }}</em>
+                        @if ($item->is_free)
+                            <div><em style="color: green;">free</em></div>
+                        @endif
                     </div>
                     <a class="app-btn" href="{{ route('buy-list.edit', ['id' => $item->id]) }}">Edit</a>
                 </li>

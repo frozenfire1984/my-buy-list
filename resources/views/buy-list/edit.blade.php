@@ -7,6 +7,11 @@
         @method('PUT')
         <div class="app-fieldset">
             <div class="app-fieldset__title">Edit Item</div>
+
+            @if(session('success'))
+                <div>{{ session('success') }}</div>
+            @endif
+
             @csrf
             <div>
                 <select name="category_id">
