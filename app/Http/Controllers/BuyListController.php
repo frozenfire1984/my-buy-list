@@ -14,26 +14,34 @@ use Illuminate\Support\Facades\Gate;
 
 class BuyListController extends Controller
 {
-    public function index() {
+    public function index(Request $request) {
+
+        $sort = $request->query('sort', 'id');
+        $direction = $request->query('direction', 'asc');
+
+
+        if (!in_array($sort, ['name', 'price', 'category'])) $sort = 'id';
+        if (!in_array($direction, ['asc', 'desc'])) $direction = 'asc';
+
+
         $message = "Hello guest";
-
-
-        $items = Item::with('category')->where('user_id', null)->get();
+        $items = Item::with('category')->whereNull('user_id')->get();
         $items->each(function($item) {
             $item->is_free = true;
-
         });
 
         if (auth()->check()) {
             $user_items = Item::with('category')->where('user_id', auth()->id())->get();
-
             $items = $user_items->merge($items);
             $user_name = auth()->user()->name;
             $message = "Hello " . $user_name;
         }
 
+        $sortField = $sort === 'category' ? 'category.name' : $sort;
+        $items = $items->sortBy($sortField, SORT_REGULAR, $direction === 'desc');
+
         $count = $items->count();
-        return view('buy-list.index', compact('items', 'count', 'message'));
+        return view('buy-list.index', compact('items', 'count', 'message', 'sort', 'direction'));
 
         /*try {
             $items = Item::with('category')->where('user_id', auth()->id())->get();

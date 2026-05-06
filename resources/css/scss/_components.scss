@@ -52,3 +52,20 @@ ol {
     list-style: revert;
     list-style-position: inside;
 }
+
+.app-table {
+    border: 1px gray solid;
+    width: 100%;
+    border-collapse: collapse;
+
+    td, th {
+        border: 1px gray solid;
+        padding: 12px;
+    }
+
+}
+
+.app-actions {
+    display: flex;
+    gap: 8px;
+}
