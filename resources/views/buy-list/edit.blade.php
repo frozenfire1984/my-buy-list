@@ -21,6 +21,16 @@
                     @endforeach
                 </select>
             </div>
+            @if (auth()->user()->is_super_admin)
+                <div>
+                    <select name="user_id">
+                        <option value="">— Ничейный —</option>
+                        @foreach($users as $user)
+                            <option value="{{$user->id}}" {{ $user->id == $item->user_id ? 'selected' : '' }}> {{ $user->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            @endif
             <div>
                 <input class="app-input" type="text" name="name" value="{{ old('name', $item->name ?? '') }}">
                 @error('name')

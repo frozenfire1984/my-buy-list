@@ -57,15 +57,19 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Gate::define('update-item', function (User $user, Item $item) {
-            return $user->id === $item->user_id;
+            return $user->id === $item->user_id || $user->is_super_admin;
         });
 
         Gate::define('view-item', function (?User $user, Item $item) {
-            return $item->user_id === null || $item->user_id === $user?->id;
+            return $item->user_id === null || $item->user_id === $user?->id || $user?->is_super_admin;
         });
 
         Gate::define('create-item', function (User $user) {
             return true;
         });
+
+        /*Gate::define('super-admin', function (?User $user) {
+            return $user->is_super_admin === true;
+        });*/
     }
 }

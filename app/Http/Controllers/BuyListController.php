@@ -16,6 +16,8 @@ class BuyListController extends Controller
 {
     public function index(Request $request) {
 
+        //dump(auth()->user()->is_super_admin);
+
         $sort = $request->query('sort', 'id');
         $direction = $request->query('direction', 'asc');
 
@@ -24,17 +26,31 @@ class BuyListController extends Controller
         if (!in_array($direction, ['asc', 'desc'])) $direction = 'asc';
 
 
-        $message = "Hello guest";
-        $items = Item::with('category')->whereNull('user_id')->get();
-        $items->each(function($item) {
-            $item->is_free = true;
-        });
+        if (auth()->user()?->is_super_admin) {
+            $message = "Hello " . auth()->user()->name . " . You are God!";
+            $items = Item::with('category', 'user')->get();
+            $items->each(function($item) {
+                if ($item->user_id === null) {
+                    $item->is_free = true;
+                };
 
-        if (auth()->check()) {
-            $user_items = Item::with('category')->where('user_id', auth()->id())->get();
-            $items = $user_items->merge($items);
-            $user_name = auth()->user()->name;
-            $message = "Hello " . $user_name;
+                if ($item->user_id === auth()->user()->id) {
+                    $item->is_admin_item = true;
+                }
+            });
+            //dd($items->toArray());
+        } else {
+            $message = "Hello guest";
+            $items = Item::with('category')->whereNull('user_id')->get();
+            $items->each(function($item) {
+                $item->is_free = true;
+            });
+
+            if (auth()->check()) {
+                $user_items = Item::with('category')->where('user_id', auth()->id())->get();
+                $items = $user_items->merge($items);
+                $message = "Hello " . auth()->user()->name;
+            }
         }
 
         $sortField = $sort === 'category' ? 'category.name' : $sort;
@@ -119,16 +135,34 @@ class BuyListController extends Controller
 
     public function edit($id) {
         $item = Item::findOrFail($id);
+        $users = [];
+
+        if (auth()->user()?->is_super_admin) {
+            $users = User::all();
+        }
 
         if (Gate::denies('update-item', $item)) {
             return redirect()->route('buy-list.claim', $id)->with('success', 'Подтвердите если хотите присвоить этот товар себе');
         }
 
         $categories = Category::all();
-        return view('buy-list.edit', [
-            'item' => $item,
-            'categories' => $categories,
+        return view('buy-list.edit', compact('item', 'categories', 'users'));
+    }
+
+    public function update (Request $request, $id) {
+        $validated = $request->validate([
+            'name' => 'required|min:2|max:50',
+            'price' => 'nullable|numeric|min:0',
+            'category_id' => 'nullable|exists:categories,id',
+            'user_id' => 'nullable|exists:users,id',
         ]);
+
+        $item = Item::findOrFail($id);
+
+
+        Gate::authorize('update-item', $item);
+        $item->update($validated);
+        return redirect()->route('buy-list.index')->with('success', 'Товар успешно обновлен');
     }
 
     public function claim($id) {
@@ -155,27 +189,11 @@ class BuyListController extends Controller
         return redirect()->route('buy-list.edit', $id)->with('success', 'Товар успешно присвоен, теперь можите редактировать его');
     }
 
-    public function update (Request $request, $id) {
-        $validated = $request->validate([
-            'name' => 'required|min:2|max:50',
-            'price' => 'nullable|numeric|min:0',
-            'category_id' => 'nullable|exists:categories,id',
-        ]);
-
-        $item = Item::findOrFail($id);
-
-
-        Gate::authorize('update-item', $item);
-        $item->update($validated);
-        return redirect()->route('buy-list.index')->with('success', 'Товар успешно обновлен');
-    }
-
     public function destroy (Request $request, $id) {
         $item = Item::findOrFail($id);
         Gate::authorize('update-item', $item);
         $item->delete();
 
         return redirect()->route('buy-list.index')->with('success', 'Товар успешно удален');
-
     }
 }
