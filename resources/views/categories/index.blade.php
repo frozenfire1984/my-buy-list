@@ -14,7 +14,13 @@
         <ol class="app-list">
             @foreach($categories as $category)
                 <li>
-                    <a href="/categories/{{$category->id}}/details">{{ $category->name }} </a>
+                    <div>
+                        @if($category->is_secret)
+                            *
+                        @endif
+
+                        <a href="/categories/{{$category->id}}/details">{{ $category->name }} </a>
+                    </div>
                     <a class="app-btn" href="/categories/{{$category->id}}/edit">Edit</a>
                 </li>
             @endforeach

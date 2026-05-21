@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
@@ -13,7 +14,12 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
+        if (auth()->user()?->is_super_admin) {
+            $categories = Category::all();
+        } else {
+            $categories = Category::where('is_secret', false)->get();
+        }
+
         return view('categories.index', [
             'categories' => $categories
         ]);
@@ -40,7 +46,13 @@ class CategoryController extends Controller
         Category::create([
             'name' => $request->name,
             'description' => $request->description,
+            'is_secret' => $request->boolean('is_secret'),
         ]);
+
+        if ($request->boolean('is_secret')) {
+            return redirect('categories')->with('success', 'Секретная категория успешно добавлена');
+        }
+
         return redirect('categories')->with('success', 'Категория успешно добавлена');
     }
 
@@ -61,23 +73,28 @@ class CategoryController extends Controller
     public function edit(string $id)
     {
         $category = Category::findOrFail($id);
+
+        Gate::authorize('update-secret-category', $category);
+
         return view('categories.edit', [
             'category' => $category
         ]);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource in storage.кон
      */
     public function update(Request $request, string $id)
     {
+        $category = Category::findOrFail($id);
+        Gate::authorize('update-secret-category', $category);
+
         $validated = $request->validate([
             'name' => ['required', 'min:2', 'max:50', Rule::unique('categories', 'name')->ignore($id)],
             'description' => 'nullable',
         ]);
 
-        $category = Category::findOrFail($id);
-
+        $validated['is_secret'] = $request->boolean('is_secret');
         $category->update($validated);
 
         return redirect('categories')->with('success', 'Категория успешно обновлена');

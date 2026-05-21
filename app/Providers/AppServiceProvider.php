@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Item;
+use App\Models\Category;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -66,6 +67,10 @@ class AppServiceProvider extends ServiceProvider
 
         Gate::define('create-item', function (User $user) {
             return true;
+        });
+
+        Gate::define('update-secret-category', function (User $user, Category $category) {
+            return !$category->is_secret || $user->is_super_admin;
         });
 
         /*Gate::define('super-admin', function (?User $user) {

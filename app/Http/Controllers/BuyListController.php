@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Validation\Rule;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Item;
@@ -47,7 +48,13 @@ class BuyListController extends Controller
             });
 
             if (auth()->check()) {
-                $user_items = Item::with('category')->where('user_id', auth()->id())->get();
+                //$user_items = Item::with('category')->where('user_id', auth()->id())->get();
+                $user_items = Item::with('category')
+                    ->where('user_id', auth()->id())
+                    ->where(fn($q) => $q->whereNull('category_id')
+                        ->orWhereHas('category', fn($q) => $q->where('is_secret', false)))
+                    ->get();
+                /* need replace by Scope on model */
                 $items = $user_items->merge($items);
                 $message = "Hello " . auth()->user()->name;
             }
@@ -110,17 +117,28 @@ class BuyListController extends Controller
     }
 
     public function create () {
-        $categories = Category::all();
+        if (auth()->user()?->is_super_admin) {
+            $categories = Category::all();
+        } else {
+            $categories = Category::where('is_secret', false)->get();
+        }
         return view('buy-list.create', [
             'categories' => $categories,
         ]);
     }
 
     public function store (Request $request) {
+
+
+        $categoryRule = auth()->user()->is_super_admin
+            ? 'nullable|exists:categories,id'
+            : ['nullable', Rule::exists('categories', 'id')->where('is_secret', false)];
+
         $request->validate([
             'name' => 'required|min:2|max:50',
             'price' => 'nullable|numeric|min:0',
-            'category_id' => 'nullable|exists:categories,id',
+            'category_id' => $categoryRule,
+            //'category_id' => 'nullable|exists:categories,id'
         ]);
 
         Item::create([
@@ -145,15 +163,23 @@ class BuyListController extends Controller
             return redirect()->route('buy-list.claim', $id)->with('success', 'Подтвердите если хотите присвоить этот товар себе');
         }
 
-        $categories = Category::all();
+        if (auth()->user()?->is_super_admin) {
+            $categories = Category::all();
+        } else {
+            $categories = Category::where('is_secret', false)->get();
+        }
         return view('buy-list.edit', compact('item', 'categories', 'users'));
     }
 
     public function update (Request $request, $id) {
+        $categoryRule = auth()->user()->is_super_admin
+            ? 'nullable|exists:categories,id'
+            : ['nullable', Rule::exists('categories', 'id')->where('is_secret', false)];
+
         $validated = $request->validate([
             'name' => 'required|min:2|max:50',
             'price' => 'nullable|numeric|min:0',
-            'category_id' => 'nullable|exists:categories,id',
+            'category_id' => $categoryRule,
             'user_id' => 'nullable|exists:users,id',
         ]);
 

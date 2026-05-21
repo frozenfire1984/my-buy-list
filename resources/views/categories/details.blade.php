@@ -13,6 +13,10 @@
         @endif
         <p>added: {{ $category->created_at->format('d.m.Y H:i') }}</p>
 
+        @if($category->is_secret)
+            *Секретная
+        @endif
+
         <hr>
 
         <div class="app-btn-group">

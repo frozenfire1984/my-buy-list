@@ -20,6 +20,11 @@
                 <div style="color: red">{{ $message }}</div>
                 @enderror
             </div>
+            @if (auth()->user()->is_super_admin)
+                <label>
+                    <input type="checkbox" name="is_secret" value="1" {{ old('is_secret', $category->is_secret) ? 'checked' : '' }}> Secret
+                </label>
+            @endif
             <hr>
             <button class="app-btn" type="submit">Update</button>
         </div>
