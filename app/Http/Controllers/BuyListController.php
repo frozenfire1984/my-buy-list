@@ -94,7 +94,18 @@ class BuyListController extends Controller
     public function show($id) {
 
         $item = Item::findOrFail($id);
-        Gate::authorize('view-item', $item); /* currently override by middleware auth */
+
+        /*dd([
+            'auth_id' => auth()->id(),
+            'auth_email' => auth()->user()->email,
+            'is_super_admin' => auth()->user()->is_super_admin,
+            'item_id' => $item->id,
+            'item_user_id' => $item->user_id,
+            'gate_allows' => Gate::allows('view-item', $item),
+        ]);*/
+
+
+        Gate::authorize('view-item', $item);
         return view('buy-list.details', [
             'item' => $item,
         ]);
