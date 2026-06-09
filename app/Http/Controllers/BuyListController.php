@@ -143,7 +143,7 @@ class BuyListController extends Controller
 
         $categoryRule = auth()->user()->is_super_admin
             ? 'nullable|exists:categories,id'
-            : ['nullable', Rule::exists('categories', 'id')->where('is_secret', false)];
+            : ['nullable', Rule::exists('categories', 'id')->where('is_secret', 0)];
 
         $request->validate([
             'name' => 'required|min:2|max:50',
@@ -183,9 +183,17 @@ class BuyListController extends Controller
     }
 
     public function update (Request $request, $id) {
+
+        /*dd(
+            $request->category_id,                                          // что улетает из формы
+            \App\Models\Category::find($request->category_id)?->is_secret,  // секретная ли она
+            auth()->user()->is_super_admin                                  // а ты сейчас супер-админ?
+        );*/
+
+
         $categoryRule = auth()->user()->is_super_admin
             ? 'nullable|exists:categories,id'
-            : ['nullable', Rule::exists('categories', 'id')->where('is_secret', false)];
+            : ['nullable', Rule::exists('categories', 'id')->where('is_secret', 0)];
 
         $validated = $request->validate([
             'name' => 'required|min:2|max:50',
