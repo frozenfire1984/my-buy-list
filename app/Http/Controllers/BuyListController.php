@@ -18,6 +18,7 @@ class BuyListController extends Controller
     public function index(Request $request) {
 
         //dump(auth()->user()->is_super_admin);
+        //dump("test");
 
         $sort = $request->query('sort', 'id');
         $direction = $request->query('direction', 'asc');
@@ -29,7 +30,13 @@ class BuyListController extends Controller
 
         if (auth()->user()?->is_super_admin) {
             $message = "Hello " . auth()->user()->name . " . You are God!";
-            $items = Item::with('category', 'user')->get();
+            //$items = Item::with('category', 'user')->get();
+            $q = Item::with('category', 'user');
+            dump($q->toSql(), $q->getBindings());
+
+            $items = $q->get();
+
+
             $items->each(function($item) {
                 if ($item->user_id === null) {
                     $item->is_free = true;
@@ -42,19 +49,28 @@ class BuyListController extends Controller
             //dd($items->toArray());
         } else {
             $message = "Hello guest";
-            $items = Item::with('category')->whereNull('user_id')->get();
+            //$items = Item::with('category')->whereNull('user_id')->get();
+            $q = Item::with('category')->whereNull('user_id');
+            dump($q->toSql(), $q->getBindings());
+            $items = $q->get();
             $items->each(function($item) {
                 $item->is_free = true;
             });
 
             if (auth()->check()) {
                 //$user_items = Item::with('category')->where('user_id', auth()->id())->get();
-                $user_items = Item::with('category')
-                    ->where('user_id', auth()->id())
-                    ->where(fn($q) => $q->whereNull('category_id')
-                        ->orWhereHas('category', fn($q) => $q->where('is_secret', false)))
-                    ->get();
+                $q = Item::with('category')
+                    ->where('user_id', auth()->id());
+                    /*->where(fn($q) => $q->whereNull('category_id')
+                        ->orWhereHas('category', fn($q) => $q->where('is_secret', false)));*/
+
+                dump($q->toSql(), $q->getBindings());   // показали SQL + байндинги
+                $user_items = $q->get();                // остаётся Eloquent → модели Item ✅
                 /* need replace by Scope on model */
+
+
+                //dump("test");
+
                 $items = $user_items->merge($items);
                 $message = "Hello " . auth()->user()->name;
             }
