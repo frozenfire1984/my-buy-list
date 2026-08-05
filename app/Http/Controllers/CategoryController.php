@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Validation\Rule;
@@ -47,6 +48,7 @@ class CategoryController extends Controller
             'name' => $request->name,
             'description' => $request->description,
             'is_secret' => $request->boolean('is_secret'),
+            'user_id' => auth()->id(),
         ]);
 
         if ($request->boolean('is_secret')) {
@@ -92,6 +94,7 @@ class CategoryController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'min:2', 'max:50', Rule::unique('categories', 'name')->ignore($id)],
             'description' => 'nullable',
+            //'user_id' => 'nullable|exists:users,id',
         ]);
 
         $validated['is_secret'] = $request->boolean('is_secret');
@@ -108,6 +111,18 @@ class CategoryController extends Controller
     public function destroy(string $id)
     {
         $category = Category::findOrFail($id);
+
+        $is_save_items = true; // further has been implemented 2 variants for user
+
+        if ($is_save_items) {
+            Item::where("category_id", $category->id)
+                ->update([
+                    "category_id" => null
+                ]);
+        } else {
+            Item::where("category_id", $category->id)->delete();
+        }
+
         $category->delete();
         return redirect('categories')->with('success', 'Категория успешно удалена');
     }

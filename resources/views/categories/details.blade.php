@@ -19,13 +19,15 @@
 
         <hr>
 
-        <div class="app-btn-group">
-            <a class="app-btn" href="/categories/{{$category->id}}/edit">Edit</a>
-            <form method="POST" action="/categories/{{ $category->id }}">
-                @csrf
-                @method('DELETE')
-                <button class="app-btn" type="submit">Delete</button>
-            </form>
-        </div>
+        @if($category->user_id === Auth::id() || auth()->user()?->is_super_admin)
+            <div class="app-btn-group">
+                <a class="app-btn" href="/categories/{{$category->id}}/edit">Edit</a>
+                <form method="POST" action="/categories/{{ $category->id }}">
+                    @csrf
+                    @method('DELETE')
+                    <button class="app-btn" type="submit">Delete</button>
+                </form>
+            </div>
+        @endif
     </article>
 @endsection

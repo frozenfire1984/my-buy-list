@@ -60,9 +60,9 @@ class BuyListController extends Controller
             if (auth()->check()) {
                 //$user_items = Item::with('category')->where('user_id', auth()->id())->get();
                 $q = Item::with('category')
-                    ->where('user_id', auth()->id());
-                    /*->where(fn($q) => $q->whereNull('category_id')
-                        ->orWhereHas('category', fn($q) => $q->where('is_secret', false)));*/
+                    ->where('user_id', auth()->id())
+                    ->where(fn($q) => $q->whereNull('category_id')
+                        ->orWhereHas('category', fn($q) => $q->where('is_secret', false)));
 
                 dump($q->toSql(), $q->getBindings());   // показали SQL + байндинги
                 $user_items = $q->get();                // остаётся Eloquent → модели Item ✅
@@ -147,7 +147,10 @@ class BuyListController extends Controller
         if (auth()->user()?->is_super_admin) {
             $categories = Category::all();
         } else {
-            $categories = Category::where('is_secret', false)->get();
+            $categories = Category::where('is_secret', false)
+                ->where(fn($q) => $q->whereNull('user_id')
+                    ->orWhere('user_id', auth()->id()  ))
+                ->get();
         }
         return view('buy-list.create', [
             'categories' => $categories,
@@ -155,8 +158,6 @@ class BuyListController extends Controller
     }
 
     public function store (Request $request) {
-
-
         $categoryRule = auth()->user()->is_super_admin
             ? 'nullable|exists:categories,id'
             : ['nullable', Rule::exists('categories', 'id')->where('is_secret', 0)];
@@ -168,11 +169,19 @@ class BuyListController extends Controller
             //'category_id' => 'nullable|exists:categories,id'
         ]);
 
+
+        if ($request->is_self_cat && $request->self_cat) {
+            $cat = Category::create([
+                'name' => $request->self_cat,
+                'user_id' => auth()->id(),
+            ]);
+        }
+
         Item::create([
             'name' => $request->name,
             'price' => $request->price,
             'user_id' => auth()->id(),
-            'category_id' => $request->category_id,
+            'category_id' => $request->is_self_cat ? $cat->id : $request->category_id,
         ]);
         //return redirect('/buy-list')->with('success', 'Товар успешно добавлен');
         return redirect()->route('buy-list.index')->with('success', 'Товар успешно добавлен');
@@ -211,7 +220,14 @@ class BuyListController extends Controller
             ? 'nullable|exists:categories,id'
             : ['nullable', Rule::exists('categories', 'id')->where('is_secret', 0)];
 
-        $validated = $request->validate([
+        if ($request->is_self_cat && $request->self_cat) {
+            $cat = Category::create([
+                'name' => $request->self_cat,
+                'user_id' => auth()->id(),
+            ]);
+        }
+
+        $request->validate([
             'name' => 'required|min:2|max:50',
             'price' => 'nullable|numeric|min:0',
             'category_id' => $categoryRule,
@@ -220,9 +236,15 @@ class BuyListController extends Controller
 
         $item = Item::findOrFail($id);
 
-
         Gate::authorize('update-item', $item);
-        $item->update($validated);
+
+        $item->update([
+            'name' => $request->name,
+            'price' => $request->price,
+            'user_id' => auth()->id(),
+            'category_id' => $request->is_self_cat ? $cat->id : $request->category_id,
+        ]);
+
         return redirect()->route('buy-list.index')->with('success', 'Товар успешно обновлен');
     }
 

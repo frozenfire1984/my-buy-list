@@ -11,19 +11,35 @@
             <div>{{ session('success') }}</div>
         @endif
 
-        <ol class="app-list">
+        <table class="app-table">
+            <thead>
+                <tr>
+                    <th>is secret</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
             @foreach($categories as $category)
-                <li>
-                    <div>
+                <tr>
+                    <td>
                         @if($category->is_secret)
                             *
                         @endif
-
+                    </td>
+                    <td>
                         <a href="/categories/{{$category->id}}/details">{{ $category->name }} </a>
-                    </div>
-                    <a class="app-btn" href="/categories/{{$category->id}}/edit">Edit</a>
-                </li>
+                    </td>
+                    <td>
+                        {{ $category->description ?? "---" }}
+                    </td>
+                    <td>
+                    @if($category->user_id === Auth::id() || auth()->user()?->is_super_admin)
+                        <a class="app-btn" href="/categories/{{$category->id}}/edit">Edit</a>
+                    @endif
+                    </td>
+                </tr>
             @endforeach
-        </ol>
+        </table>
     </div>
 @endsection

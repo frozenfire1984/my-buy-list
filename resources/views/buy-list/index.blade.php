@@ -24,8 +24,7 @@
         @endif
 
         <table class="app-table">
-
-            <thead class="app-table">
+            <thead>
                 <tr>
                     <th>Id</th>
                     <th>

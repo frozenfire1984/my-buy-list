@@ -14,12 +14,20 @@
 
             @csrf
             <div>
-                <select name="category_id">
+                <select id="category_id" name="category_id">
                     <option value="">— Без категории —</option>
                     @foreach($categories as $category)
                         <option value="{{$category->id}}" {{ $item->category_id == $category->id ? 'selected' : '' }}> {{ $category->name }}</option>
                     @endforeach
                 </select>
+            </div>
+
+            <div>
+                <label><input id="is_self_cat" type="checkbox" name="is_self_cat" />Личная категория</label>
+            </div>
+
+            <div>
+                <input disabled id="self_cat" class="app-input" type="text" name="self_cat"  value="{{ old('self_cat') }}">
             </div>
             @if (auth()->user()->is_super_admin)
                 <div>
@@ -50,3 +58,7 @@
 
     @include('partials.errors')
 @endsection
+
+@push('scripts')
+    @vite('resources/js/cat_toggle.js')
+@endpush
