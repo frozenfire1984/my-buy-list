@@ -14,21 +14,44 @@
 
             @csrf
             <div>
-                <select id="category_id" name="category_id">
+                <select
+                        id="category_id"
+                        name="category_id"
+                        {{ old('is_self_cat') ? 'disabled' : null }}
+                >
                     <option value="">— Без категории —</option>
                     @foreach($categories as $category)
-                        <option value="{{$category->id}}" {{ $item->category_id == $category->id ? 'selected' : '' }}> {{ $category->name }}</option>
+                        <option
+                                value="{{$category->id}}" {{ $item->category_id == $category->id ? 'selected' : '' }}
+                                {{ $category->id == old('category_id') ? 'selected' : null }}
+                        >
+                            {{ $category->name }}
+                        </option>
                     @endforeach
                 </select>
             </div>
 
             <div>
-                <label><input id="is_self_cat" type="checkbox" name="is_self_cat" />Личная категория</label>
+                <label>
+                    <input
+                            id="is_self_cat"
+                            type="checkbox"
+                            name="is_self_cat"
+                            {{ old('is_self_cat') ? 'checked' : null }}
+                    />
+                    Личная категория
+                </label>
             </div>
-
-            <div>
-                <input disabled id="self_cat" class="app-input" type="text" name="self_cat"  value="{{ old('self_cat') }}">
-            </div>
+            
+            <x-form.input
+                    id="self_cat"
+                    disabled
+                    name="self_cat"
+                    :value="old('self_cat')"
+                    :disabled="!old('is_self_cat')"
+            >
+            </x-form.input>
+            
             @if (auth()->user()->is_super_admin)
                 <div>
                     <select name="user_id">
@@ -39,18 +62,19 @@
                     </select>
                 </div>
             @endif
-            <div>
-                <input class="app-input" type="text" name="name" value="{{ old('name', $item->name ?? '') }}">
-                @error('name')
-                <div style="color: red">{{ $message }}</div>
-                @enderror
-            </div>
-            <div>
-                <input class="app-input" type="text" name="price" value="{{ old('price', $item->price ?? '') }}">
-                @error('price')
-                <div style="color: red">{{ $message }}</div>
-                @enderror
-            </div>
+            
+            <x-form.input
+                    label="Name"
+                    name="name"
+                    :value="old('name', $item->name ?? '')">
+            </x-form.input>
+            
+            <x-form.input
+                    label="Price"
+                    name="price"
+                    :value="old('price', $item->price ?? '')">
+            </x-form.input>
+            
             <hr>
             <button class="app-btn" type="submit">Update</button>
         </div>

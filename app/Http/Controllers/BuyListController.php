@@ -23,19 +23,12 @@ class BuyListController extends Controller
         $sort = $request->query('sort', 'id');
         $direction = $request->query('direction', 'asc');
 
-
         if (!in_array($sort, ['name', 'price', 'category'])) $sort = 'id';
         if (!in_array($direction, ['asc', 'desc'])) $direction = 'asc';
 
-
         if (auth()->user()?->is_super_admin) {
             $message = "Hello " . auth()->user()->name . " . You are God!";
-            //$items = Item::with('category', 'user')->get();
-            $q = Item::with('category', 'user');
-            dump($q->toSql(), $q->getBindings());
-
-            $items = $q->get();
-
+            $items = Item::with('category', 'user')->get();
 
             $items->each(function($item) {
                 if ($item->user_id === null) {
@@ -49,27 +42,19 @@ class BuyListController extends Controller
             //dd($items->toArray());
         } else {
             $message = "Hello guest";
-            //$items = Item::with('category')->whereNull('user_id')->get();
-            $q = Item::with('category')->whereNull('user_id');
-            dump($q->toSql(), $q->getBindings());
-            $items = $q->get();
+            $items = Item::with('category')->whereNull('user_id')->get();
+
             $items->each(function($item) {
                 $item->is_free = true;
             });
 
             if (auth()->check()) {
                 //$user_items = Item::with('category')->where('user_id', auth()->id())->get();
-                $q = Item::with('category')
+                $user_items = Item::with('category')
                     ->where('user_id', auth()->id())
                     ->where(fn($q) => $q->whereNull('category_id')
-                        ->orWhereHas('category', fn($q) => $q->where('is_secret', false)));
-
-                dump($q->toSql(), $q->getBindings());   // показали SQL + байндинги
-                $user_items = $q->get();                // остаётся Eloquent → модели Item ✅
-                /* need replace by Scope on model */
-
-
-                //dump("test");
+                        ->orWhereHas('category', fn($q) => $q->where('is_secret', false)))
+                    ->get();
 
                 $items = $user_items->merge($items);
                 $message = "Hello " . auth()->user()->name;
@@ -166,6 +151,7 @@ class BuyListController extends Controller
             'name' => 'required|min:2|max:50',
             'price' => 'nullable|numeric|min:0',
             'category_id' => $categoryRule,
+            //'self_cat' =>  'nullable|min:0',
             //'category_id' => 'nullable|exists:categories,id'
         ]);
 
@@ -220,19 +206,19 @@ class BuyListController extends Controller
             ? 'nullable|exists:categories,id'
             : ['nullable', Rule::exists('categories', 'id')->where('is_secret', 0)];
 
-        if ($request->is_self_cat && $request->self_cat) {
-            $cat = Category::create([
-                'name' => $request->self_cat,
-                'user_id' => auth()->id(),
-            ]);
-        }
-
         $request->validate([
             'name' => 'required|min:2|max:50',
             'price' => 'nullable|numeric|min:0',
             'category_id' => $categoryRule,
             'user_id' => 'nullable|exists:users,id',
         ]);
+
+        if ($request->is_self_cat && $request->self_cat) {
+            $cat = Category::create([
+                'name' => $request->self_cat,
+                'user_id' => auth()->id(),
+            ]);
+        }
 
         $item = Item::findOrFail($id);
 

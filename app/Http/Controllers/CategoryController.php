@@ -93,7 +93,7 @@ class CategoryController extends Controller
 
         $validated = $request->validate([
             'name' => ['required', 'min:2', 'max:50', Rule::unique('categories', 'name')->ignore($id)],
-            'description' => 'nullable',
+            'description' => ['nullable',  'min:5', 'max:50'],
             //'user_id' => 'nullable|exists:users,id',
         ]);
 
@@ -101,8 +101,6 @@ class CategoryController extends Controller
         $category->update($validated);
 
         return redirect('categories')->with('success', 'Категория успешно обновлена');
-
-
     }
 
     /**

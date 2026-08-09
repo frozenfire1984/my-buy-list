@@ -1,3 +1,7 @@
+form {
+  margin: 0;
+}
+
 .app-fieldset {
     display: flex;
     flex-direction: column;
@@ -8,13 +12,42 @@
     }
 }
 
+.form-item {
+  display: flex;
+  flex-direction: column;
+  align-self: start;
+  gap: 4px;
+
+  &_hh {
+    padding: 5px;
+    border: 1px #999 solid;
+  }
+}
+
+.form-err {
+  font-style: italic;
+  color: red;
+}
+
 .app-input {
     border: 1px #ccc solid;
 }
 
+.app-textarea {
+  @extend .app-input;
+  resize: none;
+  min-height: 5em;
+  max-height: 10em;
+  field-sizing: content;
+
+  &_tale {
+    min-height: 10em;
+    max-height: 20em;
+  }
+}
 
 :is(input, select):disabled {
-    opacity: .2;
+    opacity: .7;
 }
 
 input[type=checkbox] {
