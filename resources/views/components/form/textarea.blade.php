@@ -10,7 +10,7 @@
     $id = $id ?? str_replace(['[', ']'], '', $name);
 @endphp
 
-<div class="form-item {{ $wrapperClass }}">
+<div class="form-item {{ $wrapper_class }}">
     @if($label)
         <label for="{{ $id }}">{{ $label }}</label>
     @endif

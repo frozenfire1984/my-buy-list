@@ -5,9 +5,9 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Item;
 
-/*Route::get('/', function () {
+Route::get('/', function () {
     return view('index');
-});*/
+});
 
 Route::get('/', function () {
     $top_items = Item::take(7)->get();

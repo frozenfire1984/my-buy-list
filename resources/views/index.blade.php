@@ -12,10 +12,7 @@
                 </li>
             @endforeach
             </ul>
-
-            <br>
-            <br>
-            <br>
+            
             <br>
 
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam, consequatur distinctio doloribus incidunt magni neque nostrum praesentium reprehenderit rerum veniam.</p>

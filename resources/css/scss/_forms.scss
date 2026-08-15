@@ -35,9 +35,11 @@ form {
 
 .app-textarea {
   @extend .app-input;
+  flex: 1;
   resize: none;
   min-height: 5em;
   max-height: 10em;
+  width: 500px;
   field-sizing: content;
 
   &_tale {
