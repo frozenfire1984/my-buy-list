@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_super_admin', // special mass assigment 'hole'! Further need fix!
     ];
 
     /**

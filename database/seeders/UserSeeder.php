@@ -13,11 +13,48 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        if (!User::where('email', 'test@example.com')->exists()) {
+        /*if (!User::where('email', 'test@example.com')->exists()) {
             User::factory()->create([
                 'name'  => 'Test User John',
                 'email' => 'test@example.com',
             ]);
-        }
+        }*/
+
+        /*$now_timestamp = time();
+        $now = now()->format('d.m.Y H:i:s');
+
+        User::firstOrCreate(
+            ['email' => 'vasya+' . $now_timestamp .'@example.com'],
+            [
+                'name' => 'Вася ' .$now,
+                'password' => 'password'
+            ]
+        );*/
+
+        User::firstOrCreate(
+            ['email' => 'ykononov1984@gmail.com'],
+            [
+                'name' => 'IURII KONONOV',
+                'password' => 'passpass'
+            ]
+        );
+
+        User::firstOrCreate(
+            ['email' => 'ykononov1984+alex@gmail.com'],
+            [
+                'name' => 'Alex Ivanov',
+                'password' => '12345678'
+            ]
+        );
+
+        User::firstOrCreate(
+            ['email' => 'ykononov1984+super-admin@gmail.com'],
+            [
+                'name' => 'Super Admin',
+                'password' => 'admin_pass12345',
+                'is_super_admin' => 1,
+            ]
+        );
+
     }
 }

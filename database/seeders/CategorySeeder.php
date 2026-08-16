@@ -13,9 +13,20 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        Category::firstOrCreate(['name' => 'Алкоголь'], ['description' => 'Какое-то описание']);
-        Category::firstOrCreate(['name' => 'Хозтовары'], ['description' => 'Какое-то описание']);
-        Category::firstOrCreate(['name' => 'Химия'], ['description' => 'Какое-то описание']);
-        Category::firstOrCreate(['name' => 'Авто-товары'], ['description' => 'Какое-то описание']);
+        $names = [
+            'Молочные продукты', 'Мясо и птица', 'Рыба и морепродукты',
+            'Овощи и фрукты', 'Хлеб и выпечка', 'Бакалея', 'Напитки',
+            'Алкоголь', 'Снеки и сладости', 'Замороженные продукты',
+            'Консервы', 'Хозтовары', 'Бытовая химия', 'Автохимия',
+            'Личная гигиена', 'Детские товары', 'Товары для животных',
+            'Игрушки и сувениры', 'Канцелярия',
+        ];
+
+        foreach ($names as $name) {
+            Category::firstOrCreate(
+                ['name' => $name],
+                ['description' => fake()->sentence()],
+            );
+        }
     }
 }
