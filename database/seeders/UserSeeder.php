@@ -31,7 +31,7 @@ class UserSeeder extends Seeder
             ]
         );*/
 
-        User::firstOrCreate(
+        /*User::firstOrCreate(
             ['email' => 'ykononov1984@gmail.com'],
             [
                 'name' => 'IURII KONONOV',
@@ -44,6 +44,30 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Alex Ivanov',
                 'password' => '12345678'
+            ]
+        );*/
+
+        User::firstOrCreate(
+            ['email' => 'john@example.com'],
+            [
+                'name' => 'john',
+                'password' => 'password'
+            ]
+        );
+
+        User::firstOrCreate(
+            ['email' => 'alex@example.com'],
+            [
+                'name' => 'Alex Ivanov',
+                'password' => 'password'
+            ]
+        );
+
+        User::firstOrCreate(
+            ['email' => 'vasya@example.com'],
+            [
+                'name' => 'Vasya',
+                'password' => 'password'
             ]
         );
 
