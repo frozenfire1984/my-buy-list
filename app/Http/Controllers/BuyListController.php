@@ -65,6 +65,7 @@ class BuyListController extends Controller
         $items = $items->sortBy($sortField, SORT_REGULAR, $direction === 'desc');
 
         $count = $items->count();
+        //$count = $count * 100;
         return view('buy-list.index', compact('items', 'count', 'message', 'sort', 'direction'));
 
         /*try {
