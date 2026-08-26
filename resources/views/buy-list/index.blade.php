@@ -29,26 +29,33 @@
 			<table class="app-table">
 				<thead>
 				<tr>
-					<th>Id</th>
+					<th>
+                        <a href="{{ route('buy-list.index', [
+                        'sort' => 'id',
+                        'direction' => $sort === 'id' && $direction === 'asc' ? 'desc' : 'asc'
+                        ]) }}">
+                            Id {{ $sort === 'id' ? ($direction === 'asc' ? '↑' : '↓') : '↑↓' }}
+                        </a>
+                    </th>
 					<th>
 						<a href="{{ route('buy-list.index', [
-					'sort' => 'name',
-					'direction' => $sort === 'name' && $direction === 'asc' ? 'desc' : 'asc'
-					]) }}">
+                        'sort' => 'name',
+                        'direction' => $sort === 'name' && $direction === 'asc' ? 'desc' : 'asc'
+                        ]) }}">
 							Name {{ $sort === 'name' ? ($direction === 'asc' ? '↑' : '↓') : '↑↓' }}
 						</a>
 					</th>
 					<th>
 						<a href="{{ route('buy-list.index', [
-					'sort' => 'price',
-					'direction' => $sort === 'price' && $direction === 'asc' ? 'desc' : 'asc' ]) }}">
+                        'sort' => 'price',
+                        'direction' => $sort === 'price' && $direction === 'asc' ? 'desc' : 'asc' ]) }}">
 							Price {{ $sort === 'price' ? ($direction === 'asc' ? '↑' : '↓') : '↑↓' }}
 						</a>
 					</th>
 					<th>
 						<a href="{{ route('buy-list.index', [
-					'sort' => 'category',
-					'direction' => $sort === 'category' && $direction === 'asc' ? 'desc' : 'asc' ]) }}">
+                        'sort' => 'category',
+                        'direction' => $sort === 'category' && $direction === 'asc' ? 'desc' : 'asc' ]) }}">
 							Category {{ $sort === 'category' ? ($direction === 'asc' ? '↑' : '↓') : '↑↓' }}
 						</a>
 					</th>

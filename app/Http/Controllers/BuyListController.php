@@ -11,6 +11,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Gate;
+use App\Support\SortParams;
 
 
 class BuyListController extends Controller
@@ -20,11 +21,8 @@ class BuyListController extends Controller
         //dump(auth()->user()->is_super_admin);
         //dump("test");
 
-        $sort = $request->query('sort', 'id');
-        $direction = $request->query('direction', 'asc');
-
-        if (!in_array($sort, ['name', 'price', 'category'])) $sort = 'id';
-        if (!in_array($direction, ['asc', 'desc'])) $direction = 'asc';
+        $sort = SortParams::normalizeSort($request->query('sort', 'id'));
+        $direction = SortParams::normalizeDirection($request->query('direction', 'asc'));
 
         if (auth()->user()?->is_super_admin) {
             $message = "Hello " . auth()->user()->name . " . You are God!";
