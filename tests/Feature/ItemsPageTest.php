@@ -102,4 +102,68 @@ class ItemsPageTest extends TestCase
         $response->assertStatus(200);
         $response->assertDontSee('Тестовый товар юзера');
     }
+
+    #[TestDox('Создание товара который принадлежит юзеру, и проверка что этот товар находится в БД')]
+    public function test_create_item_and_check_that_it_in_db(): void
+    {
+        $user = User::factory()->create();
+
+        Item::factory()->create([
+            'name' => 'Тестовый товар юзера',
+            'user_id' => $user->id,
+        ]);
+
+        //$response = $this->get('/items');
+
+        $this->assertDatabaseHas('items', [
+            'name' => 'Тестовый товар юзера',
+            'user_id' => $user->id,
+        ]);
+    }
+
+    #[TestDox('Создание товара через форму, проверка что этот товар находится в БД и проверка что произошел редирект конкретно на /items')]
+    public function test_create_item_by_post_v1(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->post('/items', [
+            'name' => 'Тестовый товар',
+            'price' => 100
+        ]);
+
+
+        $this->assertDatabaseHas('items', [
+            'user_id' => $user->id,
+            'name' => 'Тестовый товар',
+            'price' => 100
+        ]);
+
+        $response->assertRedirect("/items");
+
+        $response->assertSessionHas('success', 'Товар успешно добавлен');
+
+        $this->actingAs($user)->get('/items')->assertSee('Товар успешно добавлен');
+    }
+
+    #[TestDox('Создание товара через форму, проверка что этот товар находится в БД и проверка что произошел редирект')]
+    public function test_create_item_by_post_v2(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)
+            ->followingRedirects()
+            ->post('/items', [
+                'name' => 'Тестовый товар',
+                'price' => 100
+            ]);
+
+        $this->assertDatabaseHas('items', [
+            'user_id' => $user->id,
+            'name' => 'Тестовый товар',
+            'price' => 100
+        ]);
+
+        $response->assertOk();
+        $response->assertSee('Товар успешно добавлен');
+    }
 }
