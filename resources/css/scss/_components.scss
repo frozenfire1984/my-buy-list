@@ -63,6 +63,17 @@ ol {
         padding: 12px;
     }
 
+  &__sort-link {
+    text-decoration: none;
+
+    &::after {
+      content: attr(href);
+      display: block;
+      font-size: 10px;
+      color: #000;
+    }
+  }
+
 }
 
 .app-actions {
