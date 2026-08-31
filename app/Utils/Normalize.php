@@ -9,3 +9,4 @@ class Normalize {
     public static function direction(?string $direction): string {
         return in_array($direction, ['asc', 'desc']) ? $direction : 'asc';
     }
+}

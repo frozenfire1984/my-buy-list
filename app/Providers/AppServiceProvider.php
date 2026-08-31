@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
     {
         /* for output into browser use dump instead Log::debug */
         app()->booted(function () {
-            $request = app(Request::class);
+            /*$request = app(Request::class);
 
             if (str_contains($request->url(), '.well-known')) {
                 return;
@@ -54,7 +54,7 @@ class AppServiceProvider extends ServiceProvider
             app()->terminating(function () use ($startTime, &$queryCount) {
                 $totalTime = round((microtime(true) - $startTime) * 1000, 2);
                 Log::debug("<<< total: {$queryCount} queries, {$totalTime}ms");
-            });
+            });*/
         });
 
         Gate::before(function (User $user) {
