@@ -3,6 +3,10 @@
 
 @section("title", "List of items")
 
+@php
+    $table_link_class = 'app-table__sort-link';
+@endphp
+
 @section("content")
     <div class="layout-stack">
         
@@ -33,40 +37,63 @@
                 $direction: {{ $direction }}
             </pre>
             
+           
+            
             <table class="app-table">
                 <thead>
                 <tr>
                     <th>
-                        <a class="app-table__sort-link" href="{{ route('buy-list.index', [
-                        'sort' => 'id',
-                        'direction' => Sorting::direction('id', $sort, $direction)
-                        ]) }}">
-                            Id {{ Sorting::arrow('id', $sort, $direction) }}
-                        </a>
+                        <x-ui.sort-link
+                            text="ID of item"
+                            route="buy-list.index"
+                            sort-by="id"
+                            :sort="$sort"
+                            :direction="$direction"
+                            :class="$table_link_class"
+                            :is-debug="true"
+                        />
                     </th>
                     <th>
-                        <a class="app-table__sort-link" href="{{ route('buy-list.index', [
-                        'sort' => 'name',
-                        'direction' => Sorting::direction('name', $sort, $direction)
-                        ]) }}">
-                            Name {{ Sorting::arrow('name', $sort, $direction) }}
-                        </a>
+                        <x-ui.sort-link
+                            route="buy-list.index"
+                            sort-by="name"
+                            :sort="$sort"
+                            :direction="$direction"
+                            :class="$table_link_class"
+                            :is-debug="true"
+                        >
+                            <x-slot:icon>
+                                <x-heroicon-s-cube />
+                            </x-slot:icon>
+                        </x-ui.sort-link>
                     </th>
                     <th>
-                        <a class="app-table__sort-link" href="{{ route('buy-list.index', [
-                        'sort' => 'price',
-                        'direction' => Sorting::direction('price', $sort, $direction)
-                        ]) }}">
-                            Price {{ Sorting::arrow('price', $sort, $direction) }}
-                        </a>
+                        <x-ui.sort-link
+                            route="buy-list.index"
+                            sort-by="price"
+                            :sort="$sort"
+                            :direction="$direction"
+                            :class="$table_link_class"
+                            :is-debug="true"
+                        >
+                            <x-slot:icon>
+                                <x-heroicon-s-currency-dollar />
+                            </x-slot:icon>
+                        </x-ui.sort-link>
                     </th>
                     <th>
-                        <a class="app-table__sort-link" href="{{ route('buy-list.index', [
-                        'sort' => 'category',
-                        'direction' => Sorting::direction('category', $sort, $direction)
-                        ]) }}">
-                            Category {{ Sorting::arrow('category', $sort, $direction) }}
-                        </a>
+                        <x-ui.sort-link
+                            route="buy-list.index"
+                            sort-by="category"
+                            :sort="$sort"
+                            :direction="$direction"
+                            :class="$table_link_class"
+                            :is-debug="true"
+                        >
+                            <x-slot:icon>
+                                <x-heroicon-s-folder />
+                            </x-slot:icon>
+                        </x-ui.sort-link>
                     </th>
                     <th>
                         {{--<a href="{{ route('buy-list.index', [
@@ -100,11 +127,19 @@
                         </td>
                         <td>
                             <div class="app-actions">
-                                <a class="app-btn" href="{{ route('buy-list.edit', ['id' => $item->id]) }}">Edit</a>
+                                <a
+                                    class="app-btn"
+                                    href="{{ route('buy-list.edit', ['id' => $item->id]) }}">
+                                    <x-heroicon-o-pencil-square />
+                                    Edit
+                                </a>
                                 <form method="POST" action="{{ route('buy-list.destroy', ['id' => $item->id]) }}">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="app-btn" type="submit">Delete</button>
+                                    <button class="app-btn" type="submit">
+                                        <x-heroicon-o-archive-box-x-mark />
+                                        Delete
+                                    </button>
                                 </form>
                             </div>
                         </td>

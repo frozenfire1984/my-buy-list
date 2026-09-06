@@ -59,8 +59,8 @@ class BuyListController extends Controller
             }
         }
 
-        $sortField = $sort === 'category' ? 'category.name' : $sort;
-        $items = $items->sortBy($sortField, SORT_REGULAR, $direction === 'desc');
+        $sort_field = $sort === 'category' ? 'category.name' : $sort;
+        $items = $items->sortBy($sort_field, SORT_REGULAR, $direction === 'desc');
 
         $count = $items->count();
         //$count = $count * 100;

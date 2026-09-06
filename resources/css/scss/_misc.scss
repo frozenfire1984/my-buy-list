@@ -1,0 +1,41 @@
+.sort-link {
+  display: flex;
+  align-items: center;
+  gap: .3em;
+  font-size: .9em;
+  text-decoration-style: dotted;
+  text-decoration-line: underline;
+  text-underline-offset: 2px;
+  white-space: nowrap;
+
+  &:active, &:hover {
+    text-decoration-style: solid;
+  }
+
+  svg {
+    width: 1em;
+    height: 1em;
+    opacity: .5;
+  }
+
+  &_active {
+    text-decoration-style: solid;
+
+    svg {
+      opacity: 1;
+    }
+  }
+
+  &_debug {
+    flex-wrap: wrap;
+    &::after {
+      content: attr(data-debug-href);
+      display: inline-block;
+      float: left;
+      width: 100%;
+      font-size: .7em;
+      color: #000;
+      text-decoration-line: none;
+    }
+  }
+}

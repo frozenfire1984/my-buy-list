@@ -35,11 +35,19 @@
 
 .app-btn {
     display: flex;
+    align-items: center;
+    gap: .3em;
     background-color: rgba(206, 212, 218, 0.32);
     padding: 10px;
     border-radius: 6px;
     width: fit-content;
     cursor: pointer;
+
+    svg {
+      flex-shrink: 0;
+      width: .9em;
+      height: .9em;
+    }
 }
 
 
@@ -65,15 +73,7 @@ ol {
 
   &__sort-link {
     text-decoration: none;
-
-    &::after {
-      content: attr(href);
-      display: block;
-      font-size: 10px;
-      color: #000;
-    }
   }
-
 }
 
 .app-actions {
