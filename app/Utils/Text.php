@@ -22,16 +22,26 @@ class Text {
     public static function capitalize(string $text, bool $is_reset = false, bool $is_each_word = false, bool $is_safe = false):string {
 
         if (trim($text) === "") {
-            throw new \InvalidArgumentException("text argument is whitespace");
+            throw new \InvalidArgumentException("text argument is empty or whitespace");
         }
 
-        if ($is_reset && !$is_safe) {
-            $text = mb_strtolower($text, 'UTF-8');
+        if ($is_reset && $is_safe) {
+            throw new \InvalidArgumentException("is_reset=true and is_safe=true prohibited together (mutually exclusive)");
+
+            /*trigger_error(
+                'Text::capitalize: is_reset игнорируется при is_safe=true (взаимоисключающие)',
+                E_USER_WARNING
+            );*/
+            //\Log::warning('Text::capitalize: is_reset игнорируется при is_safe=true (взаимоисключающие)');
         }
 
-        /*if ($is_reset) {
+        if ($is_safe && !$is_each_word) {
+            throw new \InvalidArgumentException("is_safe prohibited without is_each_word");
+        }
+
+        if ($is_reset) {
             $text = mb_strtolower($text, 'UTF-8');
-        }*/
+        }
 
         if ($is_each_word) {
             if ($is_safe) {

@@ -58,10 +58,10 @@ class TextUnitTest extends TestCase
         $this->assertEquals('Laravel Is COOL', Text::capitalize('laravel is COOL', is_each_word: true, is_safe: true));
     }
 
-    #[TestDox('Text::capitalize: если включен is_safe то is_reset не учитываеться, "laravel is COOL" -> "Laravel Is COOL"')]
+    /*#[TestDox('Text::capitalize: если включен is_safe то is_reset не учитываеться, "laravel is COOL" -> "Laravel Is COOL"')]
     public function test_capitalize_if_pass_is_safe_is_reset_not_work():void {
         $this->assertEquals('Laravel Is COOL', Text::capitalize('laravel is COOL', is_reset: true, is_each_word: true, is_safe: true));
-    }
+    }*/
 
     #[TestDox('Text::capitalize: если передать число то вернеться число')]
     public function test_pass_number():void {
@@ -85,13 +85,25 @@ class TextUnitTest extends TestCase
         Text::capitalize("     ");
     }
 
+    #[TestDox('Text::capitalize: если передать и is_reset и is_safe то выбросится исключение')]
+    public function test_throw_when_if_pass_is_safe_and_is_reset_same_time():void {
+        $this->expectException(\InvalidArgumentException::class);
+        Text::capitalize("Laravel", is_reset: true, is_each_word: true, is_safe: true);
+    }
+
+    #[TestDox('Text::capitalize: если передать is_safe без is_each_word то выбросится исключение')]
+    public function test_throw_when_if_pass_is_safe_without_is_each_word():void {
+        $this->expectException(\InvalidArgumentException::class);
+        Text::capitalize("Laravel", is_safe: true);
+    }
+
     #[TestDox('Text::capitalize: если не передать ни одного параметра то выбросится ArgumentCountError')]
     public function test_throw_when_all_arguments_is_omitted():void {
         $this->expectException(\ArgumentCountError::class);
         Text::capitalize();
     }
 
-    #[TestDox('Text::capitalize: если передать массив то выбросится ArgumentCountError')]
+    #[TestDox('Text::capitalize: если передать массив то выбросится TypeError')]
     public function test_throw_pass_array():void {
         $this->expectException(\TypeError::class);
         Text::capitalize([]);
