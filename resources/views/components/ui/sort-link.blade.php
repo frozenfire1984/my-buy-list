@@ -12,7 +12,9 @@
 @php
 
 if ($text === "") {
-   $text = $sortBy ? Text::capitalize($sortBy) : '';
+    $text = $sortBy ? Text::capitalize($sortBy) : '';
+} else {
+    $text = Text::capitalize($text, is_each_word: true, is_safe: true);
 }
 
 $href = route($route, [

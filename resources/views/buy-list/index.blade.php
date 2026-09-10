@@ -37,6 +37,10 @@
                 $direction: {{ $direction }}
             </pre>
             
+            @php
+            $number_for_test = 'Id for Items';
+            @endphp
+            
            
             
             <table class="app-table">
