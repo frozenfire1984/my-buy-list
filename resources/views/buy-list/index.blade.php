@@ -5,6 +5,7 @@
 
 @php
     $table_link_class = 'app-table__sort-link';
+    $is_debug = request()->has('debug');
 @endphp
 
 @section("content")
@@ -32,14 +33,12 @@
         
         @if($items->count())
             
-            <pre>
-                $sort: {{ $sort }}
-                $direction: {{ $direction }}
-            </pre>
-            
-            @php
-            $number_for_test = 'Id for Items';
-            @endphp
+            @if ($is_debug)
+                <pre>
+                    $sort: {{ $sort }}
+                    $direction: {{ $direction }}
+                </pre>
+            @endif
             
             <table class="app-table">
                 <thead>
@@ -52,7 +51,7 @@
                             :sort="$sort"
                             :direction="$direction"
                             :class="$table_link_class"
-                            :is-debug="true"
+                            :is-debug="$is_debug"
                         />
                     </th>
                     <th>
@@ -62,10 +61,10 @@
                             :sort="$sort"
                             :direction="$direction"
                             :class="$table_link_class"
-                            :is-debug="true"
+                            :is-debug="$is_debug"
                         >
                             <x-slot:icon>
-                                <x-heroicon-s-cube />
+                                @svg('heroicon-s-cube')
                             </x-slot:icon>
                         </x-ui.sort-link>
                     </th>
@@ -76,10 +75,10 @@
                             :sort="$sort"
                             :direction="$direction"
                             :class="$table_link_class"
-                            :is-debug="true"
+                            :is-debug="$is_debug"
                         >
                             <x-slot:icon>
-                                <x-heroicon-s-currency-dollar />
+                                @svg('heroicon-s-currency-dollar')
                             </x-slot:icon>
                         </x-ui.sort-link>
                     </th>
@@ -90,10 +89,10 @@
                             :sort="$sort"
                             :direction="$direction"
                             :class="$table_link_class"
-                            :is-debug="true"
+                            :is-debug="$is_debug"
                         >
                             <x-slot:icon>
-                                <x-heroicon-s-folder />
+                                @svg('heroicon-s-folder')
                             </x-slot:icon>
                         </x-ui.sort-link>
                     </th>
@@ -132,25 +131,44 @@
                                 <a
                                     class="app-btn"
                                     href="{{ route('buy-list.edit', ['id' => $item->id]) }}">
-                                    <x-heroicon-o-pencil-square />
+                                    @svg('heroicon-o-pencil-square')
                                     Edit
                                 </a>
                                 <form method="POST" action="{{ route('buy-list.destroy', ['id' => $item->id]) }}">
                                     @csrf
                                     @method('DELETE')
                                     <button class="app-btn" type="submit">
-                                        <x-heroicon-o-archive-box-x-mark />
+                                        @svg('heroicon-o-archive-box-x-mark')
                                         Delete
                                     </button>
                                 </form>
                             </div>
                         </td>
+                        
                         @if(auth()->user()?->is_super_admin)
+                            @php
+                                $colspan = 7;
+                            @endphp
                             <td>
-                                {{ $item->user?->name }}
+                                @if (!$item->is_free)
+                                    <span class="app-user">
+                                        @svg('heroicon-s-user')
+                                        {{ $item->user?->name }}
+                                    </span>
+                                @endif
                             </td>
                         @endif
                     </tr>
+                    @if ($is_debug)
+                    <tr>
+                        <td colspan="{{ $colspan ?? 6 }}">
+                            <details>
+                                <summary><code><small>debug info</small></code></summary>
+                                @dump($item->toArray())
+                            </details>
+                        </td>
+                    </tr>
+                    @endif
                 @endforeach
                 </tbody>
             </table>

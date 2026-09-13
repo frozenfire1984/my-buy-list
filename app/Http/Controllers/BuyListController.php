@@ -19,7 +19,7 @@ class BuyListController extends Controller
     public function index(Request $request) {
 
         //dump(auth()->user()->is_super_admin);
-        //dump("test");
+        dump("test");
 
         $sort = Normalize::sorting($request->query('sort', 'id'));
         $direction = Normalize::direction($request->query('direction', 'asc'));
@@ -37,7 +37,8 @@ class BuyListController extends Controller
                     $item->is_admin_item = true;
                 }
             });
-            //dd($items->toArray());
+
+            debugbar()->info($items->toArray());
         } else {
             $message = "Hello guest";
             $items = Item::with('category')->whereNull('user_id')->get();
@@ -56,6 +57,8 @@ class BuyListController extends Controller
 
                 $items = $user_items->merge($items);
                 $message = "Hello " . auth()->user()->name;
+
+                debugbar()->info($items->toArray());
             }
         }
 
