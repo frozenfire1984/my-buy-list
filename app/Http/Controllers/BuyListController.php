@@ -187,6 +187,8 @@ class BuyListController extends Controller
             return redirect()->route('buy-list.claim', $id)->with('success', 'Подтвердите если хотите присвоить этот товар себе');
         }
 
+        //Gate::authorize('update-item', $item);
+
         if (auth()->user()?->is_super_admin) {
             $categories = Category::all();
         } else {
