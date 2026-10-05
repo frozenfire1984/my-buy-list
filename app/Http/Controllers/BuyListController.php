@@ -1,26 +1,16 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use Illuminate\Validation\Rule;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Item;
 use App\Models\User;
-use Illuminate\Auth\Access\AuthorizationException;
-use Exception;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Gate;
 use App\Utils\Normalize;
-
 
 class BuyListController extends Controller
 {
     public function index(Request $request) {
-
-        //dump(auth()->user()->is_super_admin);
-        dump("test");
-
         $sort = Normalize::sorting($request->query('sort', 'id'));
         $direction = Normalize::direction($request->query('direction', 'asc'));
 
@@ -48,7 +38,6 @@ class BuyListController extends Controller
             });
 
             if (auth()->check()) {
-                //$user_items = Item::with('category')->where('user_id', auth()->id())->get();
                 $user_items = Item::with('category')
                     ->where('user_id', auth()->id())
                     ->where(fn($q) => $q->whereNull('category_id')
@@ -66,68 +55,16 @@ class BuyListController extends Controller
         $items = $items->sortBy($sort_field, SORT_REGULAR, $direction === 'desc');
 
         $count = $items->count();
-        //$count = $count * 100;
         return view('buy-list.index', compact('items', 'count', 'message', 'sort', 'direction'));
-
-        /*try {
-            $items = Item::with('category')->where('user_id', auth()->id())->get();
-            $count = $items->count();
-            return view('buy-list.index', compact('items', 'count'));
-        } catch(Exception $e) {
-            Log::error('Не удалось загрузить товары: ' . $e->getMessage());
-            throw $e;
-        } finally {
-            Log::info('index() выполнен');
-        }*/
-
-        //$items = Item::all();
-        /*$items = Item::with('category')->get();
-        $count = $items->count();
-        return view('buy-list.index', [
-            'items' => $items,
-            'count' => $count,
-            'meta' => [
-                'title' => "Items page",
-                'description' => "Lorem ipsum dolor sit amet",
-                'keywords' => "Lorem, ipsum, dolor, sit, amet",
-            ],
-        ]);*/
     }
 
     public function show($id) {
-
         $item = Item::findOrFail($id);
-
-        /*dd([
-            'auth_id' => auth()->id(),
-            'auth_email' => auth()->user()->email,
-            'is_super_admin' => auth()->user()->is_super_admin,
-            'item_id' => $item->id,
-            'item_user_id' => $item->user_id,
-            'gate_allows' => Gate::allows('view-item', $item),
-        ]);*/
-
 
         Gate::authorize('view-item', $item);
         return view('buy-list.details', [
             'item' => $item,
         ]);
-
-        /*try {
-            $item = Item::findOrFail($id);
-            Gate::authorize('view-item', $item);
-            return view('buy-list.details', [
-                'item' => $item,
-            ]);
-        } catch(AuthorizationException $e) {
-            Log::error('Нет доступа: ' . $e->getMessage());
-            return redirect()->route('buy-list.index')->with('error', 'Нет доступа');
-        } catch(Exception $e) {
-            Log::error('Не удалось загрузить детальный вид: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Не удалось загрузить детальный вид');
-        } finally {
-            Log::info('show() выполнен');
-        }*/
     }
 
     public function create () {
@@ -153,8 +90,6 @@ class BuyListController extends Controller
             'name' => 'required|min:2|max:50',
             'price' => 'nullable|numeric|min:0',
             'category_id' => $categoryRule,
-            //'self_cat' =>  'nullable|min:0',
-            //'category_id' => 'nullable|exists:categories,id'
         ]);
 
 
@@ -171,7 +106,6 @@ class BuyListController extends Controller
             'user_id' => auth()->id(),
             'category_id' => $request->is_self_cat ? $cat->id : $request->category_id,
         ]);
-        //return redirect('/buy-list')->with('success', 'Товар успешно добавлен');
         return redirect()->route('buy-list.index')->with('success', 'Товар успешно добавлен');
     }
 
@@ -187,8 +121,6 @@ class BuyListController extends Controller
             return redirect()->route('buy-list.claim', $id)->with('success', 'Подтвердите если хотите присвоить этот товар себе');
         }
 
-        //Gate::authorize('update-item', $item);
-
         if (auth()->user()?->is_super_admin) {
             $categories = Category::all();
         } else {
@@ -198,14 +130,6 @@ class BuyListController extends Controller
     }
 
     public function update (Request $request, $id) {
-
-        /*dd(
-            $request->category_id,                                          // что улетает из формы
-            \App\Models\Category::find($request->category_id)?->is_secret,  // секретная ли она
-            auth()->user()->is_super_admin                                  // а ты сейчас супер-админ?
-        );*/
-
-
         $categoryRule = auth()->user()->is_super_admin
             ? 'nullable|exists:categories,id'
             : ['nullable', Rule::exists('categories', 'id')->where('is_secret', 0)];

@@ -5,10 +5,6 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Item;
 
-/*Route::get('/', function () {
-    return view('index');
-});*/
-
 Route::get('/', function () {
     $top_items = Item::take(7)->get();
     return view('index', [
@@ -34,7 +30,6 @@ Route::get('/contacts', function () {
 // region Items
 Route::prefix('items')->group(function() {
     Route::get('/', [BuyListController::class, 'index'])->name('buy-list.index');
-    //Route::get('/{id}/details', [BuyListController::class, 'show'])->name('buy-list.show');
 });
 
 Route::prefix('items')->middleware('auth')->group(function() {
@@ -46,22 +41,6 @@ Route::prefix('items')->middleware('auth')->group(function() {
     Route::delete('/{id}', [BuyListController::class, 'destroy'])->name('buy-list.destroy');
     Route::get('/{id}/claim', [BuyListController::class, 'claim'])->name('buy-list.claim');
     Route::put('/{id}/claim', [BuyListController::class, 'claim_confirm'])->name('buy-list.claim_confirm');
-
-
-    /*
-     *
-     *   BuyListController::class
-    // вернёт строку: "App\Http\Controllers\BuyListController"
-     *
-    Route::post('/', function() {
-      $request = new Request(); // сам создал
-      $controller = new BuyListController();
-      $controller->store($request); // сам передал
-    });
-     */
-
-
-
 });
 // endregion
 
@@ -80,10 +59,6 @@ Route::prefix('categories')->middleware('auth')->group(function() {
 });
 // endregion
 
-/*Route::get('/ping', [PingController::class, 'ping']);
-Route::get('/ping/health', [PingController::class, 'health']);
-Route::get('/ping/version', [PingController::class, 'version']);*/
-
 // region Auth
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -94,7 +69,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
-
 
 require __DIR__.'/auth.php';
 // endregion

@@ -97,11 +97,6 @@
                         </x-ui.sort-link>
                     </th>
                     <th>
-                        {{--<a href="{{ route('buy-list.index', [
-                            'sort' => 'status',
-                            'direction' => $sort === 'status' && $direction === 'asc' ? 'desc' : 'asc' ]) }}">
-                            Status {{ $sort === 'status' ? ($direction === 'asc' ? '↑' : '↓') : '↑↓' }}
-                        </a>--}}
                         Status
                     </th>
                     <th></th>
@@ -176,8 +171,5 @@
             <p>Нет ни одного твоара</p>
             <a class="app-btn" href="{{ route('buy-list.create') }}">Create new item</a>
         @endif
-        
-        {{--<a href="/buy-list/7000/details">Broken item</a>--}}
-    
     </div>
 @endsection

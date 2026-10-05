@@ -9,18 +9,6 @@ class Item extends Model
 {
     use HasFactory;
 
-    /*
-     *
-     *
-     *  твой код             Laravel за кулисами
-      ─────────────────    ──────────────────────────────
-      Item::create([       $model = new Item()
-        'name' => ...,     $model->fill(['name' => ..., 'price' => ...])
-        'price' => ...,    $model->save()  →  INSERT INTO items ...
-      ])                   return $model
-     *
-     *
-     */
     protected $fillable = ["name", "user_id", "price", "category_id"];
 
     public function category () {
