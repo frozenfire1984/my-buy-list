@@ -53,6 +53,7 @@
 
 
 hr {
+    margin-block: 24px;
     border-top-color: #ccc;
 }
 
@@ -91,5 +92,53 @@ ol {
     width: 16px;
     height: 16px;
     opacity: .5;
+  }
+}
+
+.banner-top {
+  position: relative;
+  border: 1px hsl(0, 0%, 70%) solid;
+  border-radius: 12px;
+  padding: 25px;
+
+  &_hh {
+    border: 2px green solid;
+  }
+
+  &__label {
+    position: absolute;
+    inset: 0 auto auto 24px;
+    border-radius: 12px;
+    background-color: hsl(0, 0%, 20%);
+    padding: 2px 12px;
+    color:  #fff;
+    font-size: 10px;
+    transform: translateY(-50%);
+  }
+}
+
+.tags-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.tag {
+  display: inline-block;
+  text-decoration: none;
+  border-radius: 12px;
+  background-color: hsl(0, 0%, 90%);
+  padding: 2px 12px;
+  color:  #000;
+
+  &:hover, &:active {
+    background-color: hsl(0, 0%, 85%);
+  }
+
+  &__cat {
+    font-size: .7em;
+    font-style: italic;
+    opacity: .7;
+    margin-left: .2em;
   }
 }

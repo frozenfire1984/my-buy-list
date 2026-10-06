@@ -8,7 +8,6 @@ use App\Models\Item;
 Route::get('/', function () {
     $top_items = Item::take(7)->get();
     return view('index', [
-        'top_items' => $top_items,
         'meta' => [
             'title' => "Main page",
             'description' => "Lorem ipsum dolor sit amet",

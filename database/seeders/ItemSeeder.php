@@ -26,7 +26,7 @@ class ItemSeeder extends Seeder
             'Напитки'           => ['Coca Cola', 'Sprite', 'Fanta', 'Князь Милош'],
             'Сладости'          => ['Snickers', 'Mars', 'Рулет', 'Торт'],
 
-            'Сувениры'          => ['Магнитик', 'Матрешка'],
+            'Сувениры'          => ['Магнитик', 'Матрешка', 'Брелок', 'Кружка с принтом'],
         ];
 
         // preferences, not category belongs
@@ -60,8 +60,8 @@ class ItemSeeder extends Seeder
             }
         }
 
-        /* items without category */
-        $no_cat_items = ['Зажигалка', 'Батарейки', 'Пакет-майка', 'Свечи'];
+        /* items without category and owner */
+        $no_cat_items = ['Зажигалка', 'Батарейки', 'Пакет-майка', 'Свечи', 'Спички', 'Кубик-рубик'];
 
         foreach ($no_cat_items as $item) {
             Item::firstOrCreate(
