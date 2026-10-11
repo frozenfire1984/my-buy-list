@@ -1,6 +1,10 @@
 # TODO / Learning Plan
 
 ## Следующий урок
+- [ ] 🧪🕵️ Тесты на destroy (удаление): (1) НОРМАЛЬНОЕ удаление владельцем (happy path), (2) ЗЛОСТНОЕ — Алекс удаляет чужой товар (самое святое Васи — Ягермейстер! 🍺) → ждём 403 + товар ОСТАЛСЯ в БД (assertDatabaseHas). destroy использует `delete` policy (ownership). Проверить, что тест ловит дыру (закомментить authorize → упал).
+- [ ] 🏛️ `CategoryPolicy` (php artisan make:policy CategoryPolicy --model=Category) — перенести `update-secret-category` из AppServiceProvider + ДОБАВИТЬ проверку владельца (сейчас её нет — любой правит чужую несекретную категорию, см. разбор). Контроллер: `Gate::authorize('update-secret-category', $category)` (строки ~79, 92) → на policy. Потом — security-тесты для категорий, аналогичные товарным (view/update/delete чужой/секретной).
+- [ ] 🧹 Когда Policy устаканится в голове — удалить закомментированные старые Gate::define из AppServiceProvider (сейчас оставлены для ментальной модели; git их помнит, dead code гниёт — убрать).
+
 - [ ] Супер-админ — колонка is_admin в users, Gate::before() для обхода всех проверок
 - [ ] Policy — рефакторинг Gate на отдельный класс ItemPolicy (php artisan make:policy ItemPolicy --model=Item)
 - [ ] Slug — человекочитаемые URL (`/items/iphone-15-pro/details` вместо `/items/7/details`)

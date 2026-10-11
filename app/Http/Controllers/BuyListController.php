@@ -61,7 +61,9 @@ class BuyListController extends Controller
     public function show($id) {
         $item = Item::findOrFail($id);
 
-        Gate::authorize('view-item', $item);
+        //Gate::authorize('view-item', $item);
+        $this->authorize('view', $item);
+
         return view('buy-list.details', [
             'item' => $item,
         ]);
@@ -117,7 +119,12 @@ class BuyListController extends Controller
             $users = User::all();
         }
 
-        if (Gate::denies('update-item', $item)) {
+        /*if (Gate::denies('update-item', $item)) {
+            return redirect()->route('buy-list.claim', $id)->with('success', 'Подтвердите если хотите присвоить этот товар себе');
+        }*/
+
+
+        if (auth()->user()->cannot('update', $item)) {
             return redirect()->route('buy-list.claim', $id)->with('success', 'Подтвердите если хотите присвоить этот товар себе');
         }
 
@@ -150,7 +157,8 @@ class BuyListController extends Controller
 
         $item = Item::findOrFail($id);
 
-        Gate::authorize('update-item', $item);
+        //Gate::authorize('update-item', $item);
+        $this->authorize('update', $item);
 
         $item->update([
             'name' => $request->name,
@@ -188,7 +196,8 @@ class BuyListController extends Controller
 
     public function destroy (Request $request, $id) {
         $item = Item::findOrFail($id);
-        Gate::authorize('update-item', $item);
+        //Gate::authorize('update-item', $item);
+        $this->authorize('delete', $item);
         $item->delete();
 
         return redirect()->route('buy-list.index')->with('success', 'Товар успешно удален');

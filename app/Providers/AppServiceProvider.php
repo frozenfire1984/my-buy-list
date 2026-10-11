@@ -64,19 +64,18 @@ class AppServiceProvider extends ServiceProvider
         });
 
 
-        Gate::define('update-item', function (User $user, Item $item) {
+        /*Gate::define('update-item', function (User $user, Item $item) {
             return $user->id === $item->user_id;
         });
 
         Gate::define('view-item', function (?User $user, Item $item) {
-            //return $item->user_id === null || $item->user_id === $user?->id || $user?->is_super_admin;
             return $item->user_id === null || $item->user_id === $user?->id;
-        });
+        });*/
 
         /* not use */
-        Gate::define('create-item', function (User $user) {
+        /*Gate::define('create-item', function (User $user) {
             return true;
-        });
+        });*/
 
         Gate::define('update-secret-category', function (User $user, Category $category) {
             return !$category->is_secret;
